@@ -11,6 +11,10 @@ from .unet import conv_bn_relu_1x, conv_bn_relu, get_unet
 from .IteratorBase import *
 from .NumpyArrayIterator import *
 from .ImageDataGenerator import *
+from .zc_ImageDataGenerator import *
+from .zc_NumpyArrayIterator import *
+from .zc_test_ImageDataGenerator import *
+from change_of_translation_after_transform import *
 
 __all__ = [
     "balanced_categorical_crossentropy",
@@ -28,4 +32,8 @@ __all__ = [
     "IteratorBase",
     "NumpyArrayIterator",
     "ImageDataGenerator",
+    "zc_ImageDataGenerator",
+    "zc_NumpyArrayIterator",
+    "zc_test_ImageDataGenerator",
+    "change_of_translation_after_transform",
 ]
