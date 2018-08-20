@@ -14,7 +14,7 @@ from .ImageDataGenerator import *
 from .zc_ImageDataGenerator import *
 from .zc_NumpyArrayIterator import *
 from .zc_test_ImageDataGenerator import *
-from change_of_translation_after_transform import *
+from .change_of_translation_after_transform import *
 
 __all__ = [
     "balanced_categorical_crossentropy",
