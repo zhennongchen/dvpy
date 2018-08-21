@@ -9,6 +9,8 @@ from .wrapped_phase_difference import *
 from .wrapped_phase_difference_loss import *
 from .unet import conv_bn_relu_1x, conv_bn_relu, get_unet
 from .IteratorBase import *
+from .ImageDataGenerator import *
+from .NumpyArrayIterator import *
 from .zc_NumpyArrayIterator import *
 from .zc_ImageDataGenerator import *
 
@@ -28,4 +30,6 @@ __all__ = [
     "IteratorBase",
     "zc_NumpyArrayIterator",
     "zc_ImageDataGenerator",
+    "ImageDataGenerator",
+    "NumpyArrayIterator",
 ]
