@@ -25,6 +25,7 @@ from .determine_number_of_files import *
 from .displacement_field import *
 from .displacement_gradient_tensor import *
 from .euler_poincare_characteristic import *
+from .find_duplicates import *
 from .fit_plane import *
 from .fit_plane_to_points import *
 from .flip_axis import *
@@ -58,6 +59,7 @@ from .transform_matrix_offset_center import *
 from .wrapped_phase_difference import *
 from .wrap_phase import *
 from .normalize_image import *
+from .zc_generate_random_transform import *
 
 __all__ = [
     "AugmentationParameters",
@@ -90,6 +92,7 @@ __all__ = [
     "displacement_field",
     "displacement_gradient_tensor",
     "euler_poincare_characteristic",
+    "find_duplicates",
     "fit_plane",
     "fit_plane_to_points",
     "flip_axis",
@@ -128,4 +131,5 @@ __all__ = [
     "distance_from_point_to_plane",
     "distance_from_points_to_plane",
     "normalize_image",
+    "zc_generate_random_transform",
 ]

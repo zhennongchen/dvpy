@@ -6,6 +6,7 @@ import os
 # Internal
 import dvpy as dv
 from . import IteratorBase
+import dvpy.tf
 
 
 class zc_NumpyArrayIterator(IteratorBase):
@@ -71,7 +72,7 @@ class zc_NumpyArrayIterator(IteratorBase):
         batch_y1 = np.zeros(
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
-        batch_y2=np.zeros(tuple([current_batch_size])+(1,3))
+        batch_y2=np.zeros(tuple([current_batch_size])+(3,))
         
 
         ##
@@ -86,6 +87,7 @@ class zc_NumpyArrayIterator(IteratorBase):
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
+            #adapt_size=x.shape
 
             # Retrieve the path to the segmentation...
             label = self.y[j]
@@ -93,25 +95,29 @@ class zc_NumpyArrayIterator(IteratorBase):
                 # ...and convert the path to a one-hot encoded image.
                 label = self.output_adapter(label)
             
-            #Retrieve the path to the matrix npy file
-            patient_id=os.path.dirname(os.path.dirname(self.X[j]))
-            npy_path=os.path.join(patient_id,'matrix/2C.npy')
-            npy_matrix=np.load(npy_path)
-            transition_matrix=npy_matrix[0,:]
+            #Retrieve the path to the matrix npy file (the original translation vector)
+            #patient_id=os.path.dirname(os.path.dirname(self.X[j]))
+            #npy_path=os.path.join(patient_id,'matrix/2C.npy')
+            #npy_matrix=np.load(npy_path)
+            #translation_vector=npy_matrix[0,:]
             
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
-            if self.augment:
-                x, label = self.image_data_generator.random_transform(
-                    x.astype("float32"), label.astype("float32")
-                )
+            #if self.augment:
+                #x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(
+                 #   x.astype("float32"), label.astype("float32")
+                #)
+                #translation_vector=dvpy.tf.change_of_translation_after_transform(translation_vector,rotation,scale,adapt_size)
+            
+            
 
             # Normalize the *individual* images to zero mean and unit std
             if self.normalize:
                 batch_x[i] = dv.normalize_image(x)
             batch_y1[i] = label
-            batch_y2[i] =transition_matrix
-            batch_y=[batch_y1,batch_y2]
+            #batch_y2[i] =translation_vector
+            batch_y=[batch_y1]
+           # batch_y=[batch_y1,batch_y2]
             
 
         ##
