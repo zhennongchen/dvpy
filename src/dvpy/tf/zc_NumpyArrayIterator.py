@@ -87,7 +87,7 @@ class zc_NumpyArrayIterator(IteratorBase):
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
-            adapt_size=x.shape
+            #adapt_size=x.shape
 
             # Retrieve the path to the segmentation...
             label = self.y[j]
@@ -103,10 +103,10 @@ class zc_NumpyArrayIterator(IteratorBase):
             
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
-            if self.augment:
-                x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(
-                    x.astype("float32"), label.astype("float32")
-                )
+            #if self.augment:
+                #x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(
+                 #   x.astype("float32"), label.astype("float32")
+                #)
                 #translation_vector=dvpy.tf.change_of_translation_after_transform(translation_vector,rotation,scale,adapt_size)
             
             
