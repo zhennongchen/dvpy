@@ -107,7 +107,7 @@ class zc_NumpyArrayIterator(IteratorBase):
                 x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(
                     x.astype("float32"), label.astype("float32")
                 )
-                translation_vector=dvpy.tf.change_of_translation_after_transform(translation_vector,rotation,scale,adapt_size)
+                #translation_vector=dvpy.tf.change_of_translation_after_transform(translation_vector,rotation,scale,adapt_size)
             
             
 
