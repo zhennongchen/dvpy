@@ -1,32 +1,32 @@
 # Install:
 
-    $ pipenv install git+https://github.com/dvigneault/dvpy.git#egg=dvpy
+    $ pip install git+https://github.com/dvigneault/dvpy.git
 
-The only dependency *not* installed by default is tensorflow, as we do not want to specify the GPU or CPU version.  These can be installed as follows:
+# Update:
 
-    $ pipenv install tensorflow # CPU
-    $ pipenv install tensorflow-gpu # GPU
+    $ pip install git+https://github.com/dvigneault/dvpy.git --upgrade
 
 # Run tests:
 
-## Clone the repository:
+## First, set up a development environment.
 
-    $ git clone git@github.com:DVigneault/dvpy.git ~/Developer/repositories/dvpy
-    $ cd ~/Developer/repositories/dvpy
+    $ sudo apt-get install python3-venv python3-matplotlib
+    $ python3 -m venv .venv
+    $ . ./.venv/bin/activate
+    $ pip install --upgrade pip setuptools
 
-## Set up a development environment:
-    $ pipenv shell
+## Second, install `dvpy` in edit (i.e., development) mode.
 
-## Install a local copy, plus the dependencies:
+    $ pip install -e ./
 
-    $ pipenv install -e ./
-    $ pipenv install tensorflow # or tensorflow-gpu, as needed
-    $ pipenv install pytest
+## Third, install the third party packages.
+
+    $ pip install pytest nibabel numpy pandas pypng scikit-image scipy
+    $ pip install tensorflow-gpu pyyaml h5py keras
 
 ## Run the tests!
 
-    $ pytest                                      # Run all the tests
-    $ pytest ./test/test_find_duplicates.py       # Run a specific test
-    $ pytest ./test/test_find_duplicates.py -v    # Be verbose
-    $ pytest ./test/test_find_duplicates.py -v -s # Be super verbose
+    $ python -m pytest       # Just run tests
+    $ python -m pytest -v    # Be verbose
+    $ python -m pytest -v -s # Be super verbose
 

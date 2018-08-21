@@ -69,7 +69,7 @@ class zc_ImageDataGenerator(object):
 
     def random_transform(self, x, y):
 
-        translation,rotation,scale,transform_matrix = dv.zc_generate_random_transform(
+        transform_matrix = dv.generate_random_transform(
             self.augmentation_params, x.shape[:-1]
         )
         transform_matrix = dv.transform_full_matrix_offset_center(
@@ -92,4 +92,4 @@ class zc_ImageDataGenerator(object):
             cval=self.augmentation_params.cval,
         )
 
-        return x, y,translation,rotation,scale,transform_matrix
+        return x, y

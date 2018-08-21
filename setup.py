@@ -12,5 +12,4 @@ setup(name='dvpy',
       package_dir={'': 'src'},
       setup_requires=['pytest-runner'],
       tests_require=['pytest'],
-      install_requires=['numpy', 'keras', 'matplotlib', 'pandas', 'nibabel', 'scikit-image', 'pypng'],
      )
