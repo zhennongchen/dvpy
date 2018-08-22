@@ -131,5 +131,7 @@ class NumpyArrayIterator(IteratorBase):
                 self.image_data_generator.output_layer_names, [batch_y1,batch_y2]
             )
         }
+        print('with translation')
+        print((outputs))
 
         return (inputs, outputs)
