@@ -94,10 +94,10 @@ class NumpyArrayIterator(IteratorBase):
 
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
-            if self.augment:
-                x, label = self.image_data_generator.random_transform(
-                    x.astype("float32"), label.astype("float32")
-                )
+            #if self.augment:
+             #   x, label = self.image_data_generator.random_transform(
+                   # x.astype("float32"), label.astype("float32")
+              #  )
 
             # Normalize the *individual* images to zero mean and unit std
             if self.normalize:
