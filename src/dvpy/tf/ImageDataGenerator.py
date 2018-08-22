@@ -100,11 +100,11 @@ class ImageDataGenerator(object):
 
     def random_transform(self, x, y):
 
-        transform_matrix = dv.generate_random_transform(
+        translation,rotation,scale,transform_matrix_raw= dv.generate_random_transform(
             self.augmentation_params, x.shape[:-1]
         )
         transform_matrix = dv.transform_full_matrix_offset_center(
-            transform_matrix, x.shape[:-1]
+            transform_matrix_raw, x.shape[:-1]
         )
         x = dv.apply_affine_transform_channelwise(
             x,
@@ -123,4 +123,4 @@ class ImageDataGenerator(object):
             cval=self.augmentation_params.cval,
         )
 
-        return x, y
+        return x, y,translation,rotation,scale,transform_matrix

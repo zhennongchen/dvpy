@@ -7,7 +7,7 @@ from keras import backend as K
 # Internal
 import dvpy as dv
 from . import IteratorBase
-
+import os
 
 class NumpyArrayIterator(IteratorBase):
     def __init__(
@@ -69,9 +69,10 @@ class NumpyArrayIterator(IteratorBase):
         )
 
         # Ground Truth Segmentation
-        batch_y = np.zeros(
+        batch_y1= np.zeros(
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
+        batch_y2=np.zeros(tuple([current_batch_size])+(3,))
 
         ##
         ## Deal with Actual Data
@@ -85,19 +86,25 @@ class NumpyArrayIterator(IteratorBase):
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
+                adapt_size=x.shape
 
             # Retrieve the path to the segmentation...
             label = self.y[j]
             if self.output_adapter is not None:
                 # ...and convert the path to a one-hot encoded image.
                 label = self.output_adapter(label)
+            #Retrieve the path to the matrix npy file (the original translation vector)
+            patient_id=os.path.dirname(os.path.dirname(self.X[j]))
+            npy_path=os.path.join(patient_id,'matrix/2C.npy')
+            npy_matrix=np.load(npy_path)
+            translation=npy_matrix[0,:]
+            translation_n=npy_matrix[1,:]
 
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
-                x, label = self.image_data_generator.random_transform(
-                    x.astype("float32"), label.astype("float32")
-                )
+                x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
+                translation_n=dv.tf.change_of_translation_after_transform(translation,rotation,scale,adapt_size)
 
             # Normalize the *individual* images to zero mean and unit std
             if self.normalize:
@@ -105,8 +112,9 @@ class NumpyArrayIterator(IteratorBase):
             else:
                 batch_x[i] = x
 
-            batch_y[i] = label
-
+            batch_y1[i] = label
+            batch_y2[i] = translation_n
+            
         ##
         ## Return
         ##
@@ -120,7 +128,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2]
             )
         }
 

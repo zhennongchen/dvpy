@@ -74,4 +74,4 @@ def generate_random_transform(params, shape):
     ## Compose
     ##
 
-    return np.dot(scale, np.dot(rotation, translation))
+    return translation,rotation,scale,np.dot(scale, np.dot(rotation, translation))
