@@ -105,7 +105,7 @@ class NumpyArrayIterator(IteratorBase):
             if self.augment:
                 x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
                 translation_n=dv.tf.change_of_translation_after_transform(translation,rotation,scale,adapt_size)
-                print(j,translation_n)
+                
 
             # Normalize the *individual* images to zero mean and unit std
             if self.normalize:
