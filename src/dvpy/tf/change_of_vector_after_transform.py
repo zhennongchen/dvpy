@@ -11,8 +11,9 @@ def change_of_vector_after_transform(original_vector,rotation,scale,padding_size
         new_translation=np.dot(np.dot(rotation,scale),transpose)        
         final_translation=np.array([new_translation[0]/padding_size[0]*2,new_translation[1]/padding_size[1]*2,new_translation[2]/padding_size[2]*2])
         if norm !=2:
-                scale=np.linalg.norm(new_translation)
+                
                 n=np.array([new_translation[0],new_translation[1],new_translation[2]])
+                scale=np.linalg.norm(n)
                 final_translation=np.array([i/scale for i in n])
         return final_translation.reshape(3,)
     
