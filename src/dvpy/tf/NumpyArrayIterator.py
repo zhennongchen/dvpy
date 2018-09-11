@@ -110,9 +110,9 @@ class NumpyArrayIterator(IteratorBase):
             # If *testing*, we do not.
             if self.augment:
                 x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
-                translation_n=dv.tf.change_of_vector_after_transform(translation,rotation,scale,adapt_size)
-                x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size)
-                y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size)
+                translation_n=dv.tf.change_of_vector_after_transform(translation,rotation,scale,adapt_size,2)
+                x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size,1)
+                y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size,1)
                 
 
             # Normalize the *individual* images to zero mean and unit std
