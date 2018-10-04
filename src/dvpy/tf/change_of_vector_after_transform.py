@@ -5,7 +5,7 @@ def change_of_vector_after_transform(original_vector,rotation,scale,padding_size
         random transformation. norm=2 means translation vector which will be put in a normalized coordinate system. norm=1 means 
         the vector which will be normalized in the end """
         # Apply the transformation matrix to the original translation vector and put the new one into padding system
-        # new vector = original * rotation * scale/(size of padding image/2)
+        # new vectr = original * rotation * scale/(size of padding image/2)
         
         transpose=np.array([[original_vector[0]],[original_vector[1]],[original_vector[-1]],[1]])
         new_translation=np.dot(np.dot(rotation,scale),transpose)        
