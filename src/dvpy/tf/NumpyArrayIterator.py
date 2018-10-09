@@ -72,9 +72,10 @@ class NumpyArrayIterator(IteratorBase):
         batch_y1= np.zeros(
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
-        batch_y2=np.zeros(tuple([current_batch_size])+(3,))
+        #batch_y2=np.zeros(tuple([current_batch_size])+(3,))
         batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        batch_y4=np.zeros(tuple([current_batch_size])+(1,))
+        #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
 
         ##
         ## Deal with Actual Data
@@ -110,9 +111,9 @@ class NumpyArrayIterator(IteratorBase):
             # If *testing*, we do not.
             if self.augment:
                 x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
-                _,_,translation_n=dv.tf.change_of_vector_after_transform(translation,rotation,scale,adapt_size,2)
-                _,_,x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size,1)
-                _,_,y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size,1)
+                translation_n=dv.tf.change_of_vector_after_transform(translation,rotation,scale,adapt_size,2)
+                x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size,1)
+                y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size,1)
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -122,9 +123,10 @@ class NumpyArrayIterator(IteratorBase):
                 batch_x[i] = x
 
             batch_y1[i] = label
-            batch_y2[i] = translation_n
+            #batch_y2[i] = translation_n
             batch_y3[i] = x_n
-            batch_y4[i] = y_n
+            #batch_y4[i]=1
+            #batch_y4[i] = y_n
             
         ##
         ## Return
@@ -139,7 +141,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y3]
             )
         }
         
