@@ -73,8 +73,8 @@ class NumpyArrayIterator(IteratorBase):
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        #batch_y3=np.zeros(tuple([current_batch_size])+(3,))
+        #batch_y4=np.zeros(tuple([current_batch_size])+(1,))
         #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
 
         ##
@@ -100,20 +100,21 @@ class NumpyArrayIterator(IteratorBase):
             patient_id=os.path.dirname(os.path.dirname(self.X[j]))
             npy_path=os.path.join(patient_id,'matrix/2C.npy')
             npy_matrix=np.load(npy_path)
-            translation=npy_matrix[0,:]
-            translation_n=npy_matrix[1,:]
-            x_raw=npy_matrix[2,:]
-            x_n=npy_matrix[3,:]
-            y_raw=npy_matrix[4,:]
-            y_n=npy_matrix[5,:]
+            translation=npy_matrix[0]
+            translation_n=npy_matrix[1]
+            x_raw=npy_matrix[2]
+            x_n=npy_matrix[3]
+            y_raw=npy_matrix[4]
+            y_n=npy_matrix[5]
+            scale=npy_matrix[6]
 
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
                 x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
-                translation_n=dv.tf.change_of_vector_after_transform(translation,rotation,scale,adapt_size,2)
-                x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size,1)
-                y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size,1)
+                _,_,translation_n=dv.tf.change_of_vector_after_transform(translation,rotation,scale,adapt_size,2)
+                #x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size,1)
+                #y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size,1)
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -124,8 +125,8 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = translation_n
-            batch_y3[i] = x_n
-            batch_y4[i] = y_n
+            #batch_y3[i] = x_n
+            #batch_y4[i] = y_n
             
         ##
         ## Return
@@ -140,7 +141,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2]#,batch_y3,batch_y4]
             )
         }
         
