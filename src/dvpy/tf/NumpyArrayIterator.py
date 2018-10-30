@@ -126,7 +126,7 @@ class NumpyArrayIterator(IteratorBase):
                 batch_x[i] = x
 
             batch_y1[i] = label
-            batch_y2[i] = transition_n
+            batch_y2[i] = translation_n
             batch_y3[i] = x_n
             batch_y4[i] = y_n
             
