@@ -74,7 +74,7 @@ class NumpyArrayIterator(IteratorBase):
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
         batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(1,))
+        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
         #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
 
         ##
@@ -126,9 +126,9 @@ class NumpyArrayIterator(IteratorBase):
                 batch_x[i] = x
 
             batch_y1[i] = label
-            batch_y2[i] = x_n
-            batch_y3[i] = y_n
-            batch_y4[i] = scale_num
+            batch_y2[i] = transition_n
+            batch_y3[i] = x_n
+            batch_y4[i] = y_n
             
         ##
         ## Return
