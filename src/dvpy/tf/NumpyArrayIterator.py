@@ -73,8 +73,8 @@ class NumpyArrayIterator(IteratorBase):
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        #batch_y3=np.zeros(tuple([current_batch_size])+(3,))
+        #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
         #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
 
         ##
@@ -127,8 +127,8 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = translation_n
-            batch_y3[i] = x_n
-            batch_y4[i] = y_n
+            #batch_y3[i] = x_n
+            #batch_y4[i] = y_n
             
         ##
         ## Return
@@ -143,7 +143,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2]#,batch_y3,batch_y4]
             )
         }
         
