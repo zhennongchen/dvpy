@@ -114,7 +114,7 @@ class zc_NumpyArrayIterator(IteratorBase):
                 batch_x[i] = dv.normalize_image(x)
             batch_y1[i] = label
             batch_y2[i] =translation_vector
-        batch_y=[batch1 batch_y2]
+        batch_y=[batch_y1 batch_y2]
       
             
 
