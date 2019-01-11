@@ -7,7 +7,7 @@ import os
 import dvpy as dv
 from . import IteratorBase
 import dvpy.tf
-
+adapt_size=np.array([160,160,96])
 
 class zc_NumpyArrayIterator(IteratorBase):
     def __init__(
@@ -96,18 +96,16 @@ class zc_NumpyArrayIterator(IteratorBase):
                 label = self.output_adapter(label)
             
             #Retrieve the path to the matrix npy file (the original translation vector)
-            #patient_id=os.path.dirname(os.path.dirname(self.X[j]))
-            #npy_path=os.path.join(patient_id,'matrix/2C.npy')
-            #npy_matrix=np.load(npy_path)
-            #translation_vector=npy_matrix[0,:]
+            patient_id=os.path.dirname(os.path.dirname(self.X[j]))
+            npy_path=os.path.join(patient_id,'matrix/2C.npy')
+            npy_matrix=np.load(npy_path)
+            translation_vector=npy_matrix[0,:]
             
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
-            #if self.augment:
-                #x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(
-                 #   x.astype("float32"), label.astype("float32")
-                #)
-                #translation_vector=dvpy.tf.change_of_translation_after_transform(translation_vector,rotation,scale,adapt_size)
+            if self.augment:
+                x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
+                translation_vector=dvpy.tf.change_of_translation_after_transform(translation_vector,rotation,scale,adapt_size)
             
             
 
@@ -115,9 +113,9 @@ class zc_NumpyArrayIterator(IteratorBase):
             if self.normalize:
                 batch_x[i] = dv.normalize_image(x)
             batch_y1[i] = label
-            #batch_y2[i] =translation_vector
-            batch_y=[batch_y1]
-           # batch_y=[batch_y1,batch_y2]
+            batch_y2[i] =translation_vector
+            batch_y=[batch_y2]
+      
             
 
         ##
