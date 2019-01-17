@@ -127,7 +127,7 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = translation_n[0]
-            print("translation=",translation_n," the first element is ",translation_n[0])
+           
             #batch_y3[i] = x_n
             #batch_y4[i] = y_n
             
