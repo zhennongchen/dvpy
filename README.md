@@ -1,6 +1,7 @@
 # Install:
 
     $ pipenv install git+https://github.com/dvigneault/dvpy.git#egg=dvpy
+    $ or pip install git+https://github.com/zhennongchen/dvpy.git#egg=dvpy
 
 The only dependency *not* installed by default is tensorflow, as we do not want to specify the GPU or CPU version.  These can be installed as follows:
 
