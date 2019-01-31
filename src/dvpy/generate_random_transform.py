@@ -10,11 +10,12 @@ def generate_random_transform(params, shape):
 
     translation = np.eye(params.image_dimension + 1)
 
-    print(params.img_spatial_indices)
+    print(params.translation_range)
     for t, ax in zip(params.translation_range, params.img_spatial_indices):
         print("translation_range",params.translation_range,"ax",ax)
         print("result is ",np.random.uniform(-t, t) * shape[ax])
         translation[ax, params.image_dimension] = np.random.uniform(-t, t) * shape[ax]
+    print(translation)
 
     ##
     ## Rotation
