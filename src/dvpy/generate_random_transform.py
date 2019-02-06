@@ -10,7 +10,6 @@ def generate_random_transform(params, shape):
 
     translation = np.eye(params.image_dimension + 1)
 
-    print(params.translation_range)
     for t, ax in zip(params.translation_range, params.img_spatial_indices):
         random_t=np.random.uniform(-t, t)
         translation[ax, params.image_dimension] =random_t * shape[ax]

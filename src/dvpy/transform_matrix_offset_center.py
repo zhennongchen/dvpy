@@ -7,6 +7,7 @@ import numpy as np
 
 
 def transform_full_matrix_offset_center(matrix, shape):
+    
     # Check dimensions
     if matrix.ndim != 2:
         raise ValueError("The transformation matrix must have 2 dimensions.")
