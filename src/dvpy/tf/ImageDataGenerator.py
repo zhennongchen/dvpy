@@ -103,7 +103,8 @@ class ImageDataGenerator(object):
         translation,rotation,scale,transform_matrix_raw= dv.generate_random_transform(
             self.augmentation_params, x.shape[:-1]
         )
-        print("x.shape[-1] is",x.shape[:-1])
+
+        print("transform_matrix_raw is",transform_matrix_raw,"\nx.shape[-1] is",x.shape[:-1])
         transform_matrix = dv.transform_full_matrix_offset_center(
             transform_matrix_raw, x.shape[:-1]
         )
@@ -124,4 +125,4 @@ class ImageDataGenerator(object):
             cval=self.augmentation_params.cval,
         )
 
-        return x, y,translation,rotation,scale,transform_matrix_raw,transform_matrix
+        return x, y,translation,rotation,scale,transform_matrix
