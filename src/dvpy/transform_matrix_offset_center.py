@@ -29,7 +29,7 @@ def transform_full_matrix_offset_center(matrix, shape):
     for_mat[:-1, -1] = +shape
     rev_mat[:-1, -1] = -shape
 
-    print("shape is: ",shape,"\nfor_mat is:",for_mat,"\nrev_mat is: ",rev_mat)
+    print("shape is: ",shape,"\nfor_mat is:",for_mat,"\nrev_mat is: ",rev_mat,"\nfinal offset matrix is: ",np.dot(np.dot(for_mat, matrix), rev_mat))
 
     return np.dot(np.dot(for_mat, matrix), rev_mat)
 

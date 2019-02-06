@@ -12,12 +12,8 @@ def generate_random_transform(params, shape):
 
     print(params.translation_range)
     for t, ax in zip(params.translation_range, params.img_spatial_indices):
-        print("translation_range",params.translation_range,"ax",ax)
         random_t=np.random.uniform(-t, t)
-        print("random_t:",random_t)
-        print("shape[ax]",shape[ax])
         translation[ax, params.image_dimension] =random_t * shape[ax]
-        print("translation calculated in this loop:",translation[ax, params.image_dimension])
     print(translation)
 
     ##
