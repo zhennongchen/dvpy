@@ -111,12 +111,12 @@ class NumpyArrayIterator(IteratorBase):
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
-                x, label,_,rotation,scale,_ = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
-                translation_n=dv.tf.change_of_vector_after_transform(translation,rotation,scale,adapt_size,2)
-                x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size,1)
-                y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size,1)
-                scale_num = round(np.asscalar((scale_num * scale[0,0])),3)
-                scale_num = np.array([scale_num])
+                x, label,_,_,_,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
+                translation_n=dv.tf.change_of_vector_after_transform(translation,transform_matrix,adapt_size,2)
+                #x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size,1)
+                #y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size,1)
+                #scale_num = round(np.asscalar((scale_num * scale[0,0])),3)
+                #scale_num = np.array([scale_num])
                 
 
             # Normalize the *individual* images to zero mean and unit std

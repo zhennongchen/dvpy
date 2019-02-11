@@ -13,7 +13,7 @@ def generate_random_transform(params, shape):
     for t, ax in zip(params.translation_range, params.img_spatial_indices):
         random_t=np.random.uniform(-t, t)
         translation[ax, params.image_dimension] =random_t * shape[ax]
-    print(translation)
+   
 
     ##
     ## Rotation

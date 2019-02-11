@@ -104,7 +104,6 @@ class ImageDataGenerator(object):
             self.augmentation_params, x.shape[:-1]
         )
 
-        print("transform_matrix_raw is",transform_matrix_raw,"\nx.shape[-1] is",x.shape[:-1])
         transform_matrix = dv.transform_full_matrix_offset_center(
             transform_matrix_raw, x.shape[:-1]
         )
