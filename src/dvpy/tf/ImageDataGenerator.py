@@ -123,5 +123,5 @@ class ImageDataGenerator(object):
             fill_mode=self.augmentation_params.fill_mode,
             cval=self.augmentation_params.cval,
         )
-        print("transform_matrix is: ",transform_matrix)
+        
         return x, y,translation,rotation,scale,transform_matrix
