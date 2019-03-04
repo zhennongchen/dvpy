@@ -108,12 +108,18 @@ class NumpyArrayIterator(IteratorBase):
             mpr_center=npy_matrix[1]
             volume_center_padding=volume_center+coor_change_matrix
             mpr_center_padding=mpr_center+coor_change_matrix
+
             
-            #also need to read all x and y direction vectors
+            
+            #also need to read all vectors
+            translation_raw=npy_matrix[2]
+            translation_n=npy_matrix[3]
+
             x_raw=npy_matrix[4]
+            x_n=npy_matrix[5]
             
             y_raw=npy_matrix[6]
-         
+            y_n=npy_matrix[7]
 
 
             # If *training*, we want to augment the data.
@@ -124,7 +130,7 @@ class NumpyArrayIterator(IteratorBase):
                 #translation vector change
                 translation_n=dv.tf.change_of_translation_vector_after_augment(volume_center_padding,mpr_center_padding,
                     transform_matrix,adapt_size)
-                print(translation_n)
+               
                 #x,y directional vector change
                 x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
                 y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
