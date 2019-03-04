@@ -100,7 +100,7 @@ class NumpyArrayIterator(IteratorBase):
             patient_id=os.path.dirname(os.path.dirname(self.X[j]))
             npy_path=os.path.join(patient_id,'matrix/2C.npy')
             npy_matrix=np.load(npy_path)
-            coor_change_path=os.path.join(patient_id,'matrix/padding_coordiante_conversion.npy')
+            coor_change_path=os.path.join(patient_id,'matrix/padding_coordinate_conversion.npy')
             coor_change_matrix=np.load(coor_change_path)
 
             #convert the coordinate of mpr_center to padding image system:
