@@ -108,7 +108,7 @@ class NumpyArrayIterator(IteratorBase):
             mpr_center=npy_matrix[1]
             volume_center_padding=volume_center+coor_change_matrix
             mpr_center_padding=mpr_center+coor_change_matrix
-            print("volume_center is",volume_center,"after padding is",volume_center_padding)
+            
             #also need to read all x and y direction vectors
             x_raw=npy_matrix[4]
             
@@ -120,7 +120,7 @@ class NumpyArrayIterator(IteratorBase):
             # If *testing*, we do not.
             if self.augment:
                 x, label,_,rotation,scale,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
-                print("transform_matrix is: ",transform_matrix)
+               
                 #translation vector change
                 translation_n=dv.tf.change_of_translation_vector_after_augment(volume_center_padding,mpr_center_padding,
                     transform_matrix,adapt_size)
