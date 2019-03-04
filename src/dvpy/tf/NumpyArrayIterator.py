@@ -106,8 +106,8 @@ class NumpyArrayIterator(IteratorBase):
             #convert the coordinate of mpr_center to padding image system:
             volume_center=npy_matrix[0]
             mpr_center=npy_matrix[1]
-            volume_center_padding=volume_center+coor_change_matrix[2]
-            mpr_center_padding=mpr_center+coor_change_matrix[2]
+            volume_center_padding=volume_center+coor_change_matrix
+            mpr_center_padding=mpr_center+coor_change_matrix
             print("volume_center is",volume_center,"after padding is",volume_center_padding)
             #also need to read all x and y direction vectors
             x_raw=npy_matrix[4]
