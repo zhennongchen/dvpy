@@ -100,25 +100,34 @@ class NumpyArrayIterator(IteratorBase):
             patient_id=os.path.dirname(os.path.dirname(self.X[j]))
             npy_path=os.path.join(patient_id,'matrix/2C.npy')
             npy_matrix=np.load(npy_path)
-            translation=npy_matrix[0]
-            translation_n=npy_matrix[1]
-            x_raw=npy_matrix[2]
-            x_n=npy_matrix[3]
-            y_raw=npy_matrix[4]
-            y_n=npy_matrix[5]
-            scale_num=npy_matrix[6]
+            coor_change_path=os.path.join(patient_id,'matrix/padding_coordiante_conversion.npy')
+            coor_change_matrix=np.load(coor_change_path)
+
+            #convert the coordinate of mpr_center to padding image system:
+            volume_center=npy_matrix[0]
+            mpr_center=npy_matrix[1]
+            volume_center_padding=volume_center+coor_change_matrix[2]
+            mpr_center_padding=mpr_center+coor_change_matrix[2]
+            print("volume_center is",volume_center,"after padding is",volume_center_padding)
+            #also need to read all x and y direction vectors
+            x_raw=npy_matrix[4]
+            
+            y_raw=npy_matrix[6]
+         
+
 
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
-                x, label,_,_,_,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
+                x, label,_,rotation,scale,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
                 print("transform_matrix is: ",transform_matrix)
-                translation_n=dv.tf.change_of_vector_after_transform(translation,transform_matrix,adapt_size,2)
+                #translation vector change
+                translation_n=dv.tf.change_of_translation_vector_after_augment(volume_center_padding,mpr_center_padding,
+                    transform_matrix,adapt_size)
+                #x,y directional vector change
+                x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
+                y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
                 
-                #x_n=dv.tf.change_of_vector_after_transform(x_raw,rotation,scale,adapt_size,1)
-                #y_n=dv.tf.change_of_vector_after_transform(y_raw,rotation,scale,adapt_size,1)
-                #scale_num = round(np.asscalar((scale_num * scale[0,0])),3)
-                #scale_num = np.array([scale_num])
                 
 
             # Normalize the *individual* images to zero mean and unit std
