@@ -124,7 +124,7 @@ class NumpyArrayIterator(IteratorBase):
                 #translation vector change
                 translation_n=dv.tf.change_of_translation_vector_after_augment(volume_center_padding,mpr_center_padding,
                     transform_matrix,adapt_size)
-                print("translation_n")
+                print(translation_n)
                 #x,y directional vector change
                 x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
                 y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
