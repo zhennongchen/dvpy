@@ -13,14 +13,15 @@ def generate_random_transform(params, shape):
     for t, ax in zip(params.translation_range, params.img_spatial_indices):
         random_t=np.random.uniform(-t, t)
         translation[ax, params.image_dimension] =random_t * shape[ax]
-   
+    print('translation vector is:',translation)
+    print('params.img_spatial_indices is:',params.img_spatial_indices)
 
     ##
     ## Rotation
     ##
 
     rotation = np.eye(params.image_dimension + 1)
-
+    print('params.rotation_range is:',params.rotation_range[0],params.rotation_range[1])
     if params.image_dimension == 2:
 
         theta = (
@@ -56,12 +57,12 @@ def generate_random_transform(params, shape):
     ##
     ## Scale
     ##
-
+    print("rotation matrix is ",rotation)
     scale = np.eye(params.image_dimension + 1)
     scale_factor = np.random.uniform(1 - params.scale_range, 1 + params.scale_range)
     for ax in params.img_spatial_indices:
         scale[ax, ax] = scale_factor
-
+    print('scale matrix is ',scale)
     ##
     ## Flip
     ##
