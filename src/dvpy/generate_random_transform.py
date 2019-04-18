@@ -17,10 +17,10 @@ def generate_random_transform(params, shape):
     #only translate to the first quadrant
     for t,ax in zip(params.translation_range,params.img_spatial_indices): 
         if ax<2:
-            random_t=np.random.uniform(-16,-16) 
-            translation[ax,params.image_dimension]=random_t
-    print('translation vector is:',translation)
-    print('params.img_spatial_indices is:',params.img_spatial_indices)
+            random_t=np.random.uniform(-t,0) 
+            translation[ax,params.image_dimension]=random_t *shape[ax]
+    #print('translation vector is:',translation)
+    #print('params.img_spatial_indices is:',params.img_spatial_indices)
 
     ##
     ## Rotation
