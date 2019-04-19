@@ -132,8 +132,8 @@ class NumpyArrayIterator(IteratorBase):
                     transform_matrix,adapt_size)
                
                 #x,y directional vector change
-                x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
-                y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
+                #x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
+                #y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
                 
                 
 
