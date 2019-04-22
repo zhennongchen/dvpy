@@ -10,16 +10,15 @@ def generate_random_transform(params, shape):
 
     translation = np.eye(params.image_dimension + 1)
     #raw code   
-    #for t, ax in zip(params.translation_range, params.img_spatial_indices):
-        #random_t=np.random.uniform(-t, t)
-        #translation[ax, params.image_dimension] =random_t * shape[ax]
+    for t, ax in zip(params.translation_range, params.img_spatial_indices):
+        random_t=np.random.uniform(-t, t)
+        translation[ax, params.image_dimension] =random_t * shape[ax]
 
     #only translate to the first quadrant
-    for t,ax in zip(params.translation_range,params.img_spatial_indices): 
-        random_t=np.random.uniform(-t,0) 
-        translation[ax,params.image_dimension]=random_t *shape[ax]
-    #print('translation vector is:',translation)
-    #print('params.img_spatial_indices is:',params.img_spatial_indices)
+    #for t,ax in zip(params.translation_range,params.img_spatial_indices): 
+     #   random_t=np.random.uniform(-t,0) 
+      #  translation[ax,params.image_dimension]=random_t *shape[ax]
+
 
     ##
     ## Rotation
