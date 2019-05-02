@@ -2,7 +2,7 @@ import dvpy as dv
 import numpy as np
 
 
-def generate_random_transform(params, shape):
+def zc_generate_random_transform(params, shape):
 
     ##
     ## Translation
