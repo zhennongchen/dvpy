@@ -132,4 +132,5 @@ __all__ = [
     "distance_from_points_to_plane",
     "normalize_image",
     "zc_random",
+    "zc_apply_affine_transform",
 ]

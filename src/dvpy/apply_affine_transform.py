@@ -74,8 +74,6 @@ def apply_affine_transform(
 
     :raises: `ValueError` if image dimensions or matrix shape are incorrect.
     """
-
-    print(transform_matrix.shape,array.ndim)
     # Check dimensions
     if transform_matrix.ndim != 2:
         raise ValueError("The transformation matrix must have 2 dimensions.")
@@ -96,3 +94,15 @@ def apply_affine_transform(
     return affine_transform(
         array, final_affine_matrix, final_offset, order=0, mode=fill_mode, cval=cval
     )
+
+def zc_apply_affine_transform(
+    array, transform_matrix, fill_mode="constant", cval=0., order=0
+):
+    
+    final_affine_matrix = transform_matrix[: array.ndim, : array.ndim]
+    final_offset = transform_matrix[: array.ndim, array.ndim]
+
+    return affine_transform(
+        array, final_affine_matrix, final_offset, order=0, mode=fill_mode, cval=cval
+    )
+
