@@ -125,3 +125,9 @@ class ImageDataGenerator(object):
         )
         
         return x, y,translation,rotation,scale,transform_matrix
+
+    def zc_random_transform(self,x):
+        translation,rotation,scale,matrix_raw=dv.zc_generate_random_transform(self.augmentation_params,x.shape[:-1])
+        matrix_final=dv.transform_full_matrix_offset_center(matrix_raw,x.shape[:-1])
+        x_aug = dv.apply_affine_transform(x,matrix_final, fill_mode="constant", cval=0., order=0)
+        return x_aug,translation,rotation,scale,matrix_raw,matrix_final

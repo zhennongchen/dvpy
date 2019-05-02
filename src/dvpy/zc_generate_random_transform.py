@@ -2,16 +2,18 @@ import dvpy as dv
 import numpy as np
 
 
-def zc_generate_random_transform(params, shape):
+def generate_random_transform(params, shape):
 
     ##
     ## Translation
     ##
 
     translation = np.eye(params.image_dimension + 1)
-
     for t, ax in zip(params.translation_range, params.img_spatial_indices):
-        translation[ax, params.image_dimension] = np.random.uniform(-t, t) * shape[ax]
+        random_t=np.random.uniform(-t, 0)
+        translation[ax, params.image_dimension] =random_t * shape[ax]
+
+
 
     ##
     ## Rotation
@@ -54,12 +56,12 @@ def zc_generate_random_transform(params, shape):
     ##
     ## Scale
     ##
-
+    
     scale = np.eye(params.image_dimension + 1)
     scale_factor = np.random.uniform(1 - params.scale_range, 1 + params.scale_range)
     for ax in params.img_spatial_indices:
         scale[ax, ax] = scale_factor
-
+    
     ##
     ## Flip
     ##
