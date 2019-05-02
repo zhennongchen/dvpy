@@ -75,7 +75,6 @@ def apply_affine_transform(
     :raises: `ValueError` if image dimensions or matrix shape are incorrect.
     """
 
-    print(transform_matrix.shape,array.ndim)
     # Check dimensions
     if transform_matrix.ndim != 2:
         raise ValueError("The transformation matrix must have 2 dimensions.")
