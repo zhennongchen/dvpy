@@ -98,9 +98,9 @@ def apply_affine_transform(
 def zc_apply_affine_transform(
     array, transform_matrix, fill_mode="constant", cval=0., order=0
 ):
-    dim=array.ndim-1;
-    final_affine_matrix = transform_matrix[: array.ndim, : array.ndim]
-    final_offset = transform_matrix[: array.ndim, array.ndim]
+    d = array.ndim - 1
+    final_affine_matrix = transform_matrix[: d, : d]
+    final_offset = transform_matrix[: d, d]
 
     return affine_transform(
         array, final_affine_matrix, final_offset, order=0, mode=fill_mode, cval=cval
