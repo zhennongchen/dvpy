@@ -59,7 +59,7 @@ from .transform_matrix_offset_center import *
 from .wrapped_phase_difference import *
 from .wrap_phase import *
 from .normalize_image import *
-from .zc_generate_random_transform import *
+from .zc_random import *
 
 __all__ = [
     "AugmentationParameters",
@@ -131,5 +131,5 @@ __all__ = [
     "distance_from_point_to_plane",
     "distance_from_points_to_plane",
     "normalize_image",
-    "zc_generate_random_transform",
+    "zc_random",
 ]
