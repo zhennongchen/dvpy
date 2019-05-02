@@ -98,7 +98,7 @@ def apply_affine_transform(
 def zc_apply_affine_transform(
     array, transform_matrix, fill_mode="constant", cval=0., order=0
 ):
-    
+    dim=array.ndim-1;
     final_affine_matrix = transform_matrix[: array.ndim, : array.ndim]
     final_offset = transform_matrix[: array.ndim, array.ndim]
 
