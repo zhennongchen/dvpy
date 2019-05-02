@@ -38,6 +38,11 @@ def apply_affine_transform_channelwise(
     """
 
     array = np.rollaxis(array, channel_index, 0)
+    count=0
+    for x_channel in array:
+        count = count+1
+    print(count)
+
     array = [
         apply_affine_transform(
             x_channel, transform_matrix, fill_mode=fill_mode, cval=cval, order=0
