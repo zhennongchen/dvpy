@@ -129,9 +129,6 @@ class ImageDataGenerator(object):
     def zc_random_transform(self,x):
         translation,rotation,scale,matrix_raw=dv.zc_random(self.augmentation_params,x.shape[:-1])
         matrix_final=dv.transform_full_matrix_offset_center(matrix_raw,x.shape[:-1])
-        print('channel_index: ',self.augmentation_params.img_channel_index,
-        '\nfill_mode: ',self.augmentation_params.fill_mode,
-            '\ncval: ',self.augmentation_params.cval)
         x_aug = dv.apply_affine_transform_channelwise(x,matrix_final[:-1, :], 
             channel_index=self.augmentation_params.img_channel_index,
             fill_mode=self.augmentation_params.fill_mode,
