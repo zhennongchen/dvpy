@@ -41,7 +41,7 @@ def apply_affine_transform_channelwise(
     count=0
     for x_channel in array:
         count = count+1
-    print(count)
+    print('count rollaxis',count)
 
     array = [
         apply_affine_transform(
