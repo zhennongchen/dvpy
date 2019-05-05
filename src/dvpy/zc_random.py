@@ -31,22 +31,28 @@ def zc_random(params, shape):
 
         rotation[:2, :2] = dv.rotation_matrix_from_angle(theta)
     elif params.image_dimension == 3:
+        roll_degree=np.random.uniform(-params.rotation_range[0], params.rotation_range[0])
+        print(roll_degree)
         x = dv.rotation_matrix_from_angle(
             np.pi
             / 180.0
-            * np.random.uniform(-params.rotation_range[0], params.rotation_range[0]),
+            * roll_degree,
             matrix_type="roll",
         )
+        pitch_degree =np.random.uniform(-params.rotation_range[1], params.rotation_range[1])
+        print(pitch_degree)
         y = dv.rotation_matrix_from_angle(
             np.pi
             / 180.0
-            * np.random.uniform(-params.rotation_range[1], params.rotation_range[1]),
+            * pitch_degree,
             matrix_type="pitch",
         )
+        yaw_degree = np.random.uniform(-params.rotation_range[2], params.rotation_range[2])
+        print(yaw_degree)
         z = dv.rotation_matrix_from_angle(
             np.pi
             / 180.0
-            * np.random.uniform(-params.rotation_range[2], params.rotation_range[2]),
+            * yaw_degree,
             matrix_type="yaw",
         )
         rotation[:3, :3] = np.dot(z, np.dot(y, x))
@@ -59,6 +65,7 @@ def zc_random(params, shape):
     
     scale = np.eye(params.image_dimension + 1)
     scale_factor = np.random.uniform(1 - params.scale_range, 1 + params.scale_range)
+    print(scale_factor)
     for ax in params.img_spatial_indices:
         scale[ax, ax] = scale_factor
     
