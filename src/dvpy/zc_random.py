@@ -11,8 +11,9 @@ def zc_random(params, shape):
     translation = np.eye(params.image_dimension + 1)
     for t, ax in zip(params.translation_range, params.img_spatial_indices):
         random_t=np.random.uniform(t,t)
-        print("translation_pixel:",random_t)
         translation[ax, params.image_dimension] =random_t #* shape[ax]
+        if ax == 0:
+            print("translation_pixel:",random_t)
 
 
 
