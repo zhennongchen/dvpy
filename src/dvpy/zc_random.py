@@ -11,6 +11,7 @@ def zc_random(params, shape):
     translation = np.eye(params.image_dimension + 1)
     for t, ax in zip(params.translation_range, params.img_spatial_indices):
         random_t=np.random.uniform(t,t)
+        print("translation_pixel:",random_t)
         translation[ax, params.image_dimension] =random_t #* shape[ax]
 
 
@@ -32,7 +33,7 @@ def zc_random(params, shape):
         rotation[:2, :2] = dv.rotation_matrix_from_angle(theta)
     elif params.image_dimension == 3:
         roll_degree=np.random.uniform(-params.rotation_range[0], params.rotation_range[0])
-        print(roll_degree)
+        print("roll_degree",roll_degree)
         x = dv.rotation_matrix_from_angle(
             np.pi
             / 180.0
@@ -40,7 +41,7 @@ def zc_random(params, shape):
             matrix_type="roll",
         )
         pitch_degree =np.random.uniform(-params.rotation_range[1], params.rotation_range[1])
-        print(pitch_degree)
+        print('pitch_degree',pitch_degree)
         y = dv.rotation_matrix_from_angle(
             np.pi
             / 180.0
@@ -48,7 +49,7 @@ def zc_random(params, shape):
             matrix_type="pitch",
         )
         yaw_degree = np.random.uniform(-params.rotation_range[2], params.rotation_range[2])
-        print(yaw_degree)
+        print('yaw_degree',yaw_degree)
         z = dv.rotation_matrix_from_angle(
             np.pi
             / 180.0
@@ -65,7 +66,7 @@ def zc_random(params, shape):
     
     scale = np.eye(params.image_dimension + 1)
     scale_factor = np.random.uniform(1 - params.scale_range, 1 + params.scale_range)
-    print(scale_factor)
+    print('scale',scale_factor)
     for ax in params.img_spatial_indices:
         scale[ax, ax] = scale_factor
     
