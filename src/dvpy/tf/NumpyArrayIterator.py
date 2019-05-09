@@ -107,7 +107,6 @@ class NumpyArrayIterator(IteratorBase):
             volume_center=npy_matrix[0]
             mpr_center=npy_matrix[1]
             volume_center_padding=volume_center+coor_change_matrix
-            print(volume_center_padding)
             mpr_center_padding=mpr_center+coor_change_matrix
             
             #also need to read all vectors
