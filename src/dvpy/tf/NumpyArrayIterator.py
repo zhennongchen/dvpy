@@ -114,10 +114,10 @@ class NumpyArrayIterator(IteratorBase):
             translation_n=npy_matrix[3]
 
             x_raw=npy_matrix[4]
-            #x_n=npy_matrix[5]
+            x_n=npy_matrix[5]
             
             y_raw=npy_matrix[6]
-            #y_n=npy_matrix[7]
+            y_n=npy_matrix[7]
 
 
             # If *training*, we want to augment the data.
