@@ -73,9 +73,9 @@ class NumpyArrayIterator(IteratorBase):
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
-        #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        # batch_y3=np.zeros(tuple([current_batch_size])+(3,))
+        # batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+     
 
         ##
         ## Deal with Actual Data
@@ -97,11 +97,11 @@ class NumpyArrayIterator(IteratorBase):
                 # ...and convert the path to a one-hot encoded image.
                 label = self.output_adapter(label)
             #Retrieve the path to the matrix npy file (the original translation vector)
-            patient_id=os.path.dirname(os.path.dirname(self.X[j]))
-            npy_path=os.path.join(patient_id,'matrix/2C.npy')
-            npy_matrix=np.load(npy_path)
-            coor_change_path=os.path.join(patient_id,'matrix/padding_coordinate_conversion.npy')
-            coor_change_matrix=np.load(coor_change_path)
+            patient_id = os.path.dirname(os.path.dirname(self.X[j]))
+            affine_path = os.path.join(patient_id,'affine/2C.npy')
+            npy_matrix = np.load(affine_path)
+            coor_change_path = os.path.join(patient_id,'affine/padding_coordinate_conversion.npy')
+            coor_change_matrix = np.load(coor_change_path)
 
             #convert the coordinate of mpr_center to padding image system:
             volume_center=npy_matrix[0]
@@ -119,7 +119,6 @@ class NumpyArrayIterator(IteratorBase):
             y_raw=npy_matrix[6]
             y_n=npy_matrix[7]
 
-
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
@@ -129,9 +128,9 @@ class NumpyArrayIterator(IteratorBase):
                 translation_n=dv.tf.change_of_translation_vector_after_augment(volume_center_padding,mpr_center_padding,
                     transform_matrix,adapt_size)
                
-                #x,y directional vector change
-                x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
-                y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
+                # #x,y directional vector change
+                # x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
+                # y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
                 
                 
 
@@ -143,8 +142,8 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = translation_n
-            batch_y3[i] = x_n
-            batch_y4[i] = y_n
+            # batch_y3[i] = x_n
+            # batch_y4[i] = y_n
             
         ##
         ## Return
@@ -159,7 +158,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2]
             )
         }
         
