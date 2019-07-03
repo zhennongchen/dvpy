@@ -73,8 +73,8 @@ class NumpyArrayIterator(IteratorBase):
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
-        # batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        # batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        batch_y3=np.zeros(tuple([current_batch_size])+(3,))
+        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
      
 
         ##
@@ -98,7 +98,7 @@ class NumpyArrayIterator(IteratorBase):
                 label = self.output_adapter(label)
             #Retrieve the path to the matrix npy file (the original translation vector)
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
-            affine_path = os.path.join(patient_id,'affine/MID.npy')
+            affine_path = os.path.join(patient_id,'affine/2C.npy')
             npy_matrix = np.load(affine_path)
             coor_change_path = os.path.join(patient_id,'affine/padding_coordinate_conversion.npy')
             coor_change_matrix = np.load(coor_change_path)
@@ -129,8 +129,8 @@ class NumpyArrayIterator(IteratorBase):
                     transform_matrix,adapt_size)
                
                 # #x,y directional vector change
-                # x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
-                # y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
+                x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
+                y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
                 
                 
 
@@ -142,8 +142,8 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = translation_n
-            # batch_y3[i] = x_n
-            # batch_y4[i] = y_n
+            batch_y3[i] = x_n
+            batch_y4[i] = y_n
             
         ##
         ## Return
@@ -158,7 +158,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
             )
         }
         
