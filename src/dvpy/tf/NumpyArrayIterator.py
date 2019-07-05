@@ -74,7 +74,7 @@ class NumpyArrayIterator(IteratorBase):
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
         batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
      
 
         ##
@@ -130,9 +130,9 @@ class NumpyArrayIterator(IteratorBase):
                     transform_matrix,adapt_size)
                
                 # #x,y directional vector change
-                #x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
-                #y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
-                n_n = dv.tf.change_of_direction_vector_after_augment(n_raw,rotation,scale)
+                x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
+                y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
+                #n_n = dv.tf.change_of_direction_vector_after_augment(n_raw,rotation,scale)
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -143,8 +143,8 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = translation_n
-            batch_y3[i] = n_n
-            #batch_y4[i] = y_n
+            batch_y3[i] = x_n
+            batch_y4[i] = y_n
             
         ##
         ## Return
@@ -159,7 +159,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
             )
         }
         
