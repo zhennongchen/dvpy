@@ -3,6 +3,7 @@
 # Third Party
 import numpy as np
 from keras import backend as K
+import sympy as sym
 
 # Internal
 import dvpy as dv
@@ -74,7 +75,7 @@ class NumpyArrayIterator(IteratorBase):
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
         batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
      
 
         ##
@@ -99,26 +100,15 @@ class NumpyArrayIterator(IteratorBase):
             #Retrieve the path to the matrix npy file (the original translation vector)
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
             affine_path = os.path.join(patient_id,'affine/2C.npy')
-            npy_matrix = np.load(affine_path)
-            coor_change_path = os.path.join(patient_id,'affine/padding_coordinate_conversion.npy')
-            coor_change_matrix = np.load(coor_change_path)
+            M = np.load(affine_path)
+            pad_path = os.path.join(patient_id,'affine/padding_coordinate_conversion.npy')
+            pad_v = np.load(pad_path)
 
-            #convert the coordinate of mpr_center to padding image system:
-            volume_center=npy_matrix[0]
-            mpr_center=npy_matrix[1]
-            volume_center_padding=volume_center+coor_change_matrix
-            mpr_center_padding=mpr_center+coor_change_matrix
-            
-            #also need to read all vectors
-            translation_raw=npy_matrix[2]
-            translation_n=npy_matrix[3]
-
-            x_raw=npy_matrix[4]
-            x_n=npy_matrix[5]
-            y_raw=npy_matrix[6]
-            y_n=npy_matrix[7]
-            n_raw=npy_matrix[8]
-            n_n=npy_matrix[9]
+            # extract all parameters
+            [Q, t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale] = [M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9]]
+            # origin after padding
+            image_o = [0,0,0]+pad_v
+            mpr_o = [0,0,0] + t_o + pad_v
 
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
@@ -126,13 +116,32 @@ class NumpyArrayIterator(IteratorBase):
                 x, label,translation,rotation,scale,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
                
                 #translation vector change
-                translation_n=dv.tf.change_of_translation_vector_after_augment(volume_center_padding,mpr_center_padding,
-                    transform_matrix,adapt_size)
+                translation_n = dv.tf.change_of_translation_vector_after_augment(image_o,mpr_o,transform_matrix,adapt_size)
                
-                # #x,y directional vector change
-                x_n=dv.tf.change_of_direction_vector_after_augment(x_raw,rotation,scale)
-                y_n=dv.tf.change_of_direction_vector_after_augment(y_raw,rotation,scale)
-                #n_n = dv.tf.change_of_direction_vector_after_augment(n_raw,rotation,scale)
+                # direction vector change
+                xx, x_len, x_n = dv.tf.change_of_direction_vector_after_augment(x_d,rotation,scale)
+                yy, y_len, y_n = dv.tf.change_of_direction_vector_after_augment(y_d,rotation,scale)
+                zz, z_len, z_n = dv.tf.change_of_direction_vector_after_augment(z_d,rotation,scale)
+                RS = np.array([xx,yy,zz])
+                print(RS.shape)
+                S = np.array([[x_len,0,0],[0,y_len,0],[0,0,z_len]])
+                R = RS.dot(np.linalg.inv(S))
+                a,b,c,d = sym.symbols('a,b,c,d')
+                e1 = sym.Eq(1-(2*(c**2+d**2)),R[0,0])
+                e2 = sym.Eq(1-(2*(b**2+d**2)),R[1,1])
+                e3 = sym.Eq(1-(2*(b**2+c**2)),R[2,2])
+                e4 = sym.Eq(1-b**2-c**2-d**2,a**2)
+                Ans = sym.solve([e1,e2,e3,e4],(a,b,c,d))
+                # screen out the correct one from Ans
+                num = []
+                for i in range(0,len(Ans)):
+                    if dv.tf.screen_out_correct_Q(Ans[i],R) == 1:
+                        num.append(i)
+                if len(num) != 1:
+                    print('wrong number of solved result!!\n')
+                QQ = Ans[num[0]][1:4]
+                QQ = np.asarray(Ans)
+                QQ = QQ.reshape(3,)
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -143,8 +152,8 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = translation_n
-            batch_y3[i] = x_n
-            batch_y4[i] = y_n
+            batch_y3[i] = QQ
+            #batch_y4[i] = y_n
             
         ##
         ## Return
@@ -159,7 +168,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3]
             )
         }
         

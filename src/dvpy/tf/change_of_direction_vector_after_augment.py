@@ -7,8 +7,9 @@ def change_of_direction_vector_after_augment(ori_vector,rotation,scale):
     vector_aug=np.dot(ori_1,m)[:3]
     
     #normalization to length=1
-    scale=np.linalg.norm(vector_aug)
-    final_v=np.array([i/scale for i in vector_aug])
+    
+    s=np.linalg.norm(vector_aug)
+    final_v=np.array([i/s for i in vector_aug])
+    
         
-        
-    return final_v.reshape(3,)
+    return vector_aug.reshape(3,), s ,final_v.reshape(3,)
