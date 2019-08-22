@@ -126,6 +126,7 @@ class NumpyArrayIterator(IteratorBase):
                 
                 S = np.array([[x_len,0,0],[0,y_len,0],[0,0,z_len]])
                 R = RS.dot(np.linalg.inv(S))
+                print(R,'\n')
                 a,b,c,d = sym.symbols('a,b,c,d')
                 e1 = sym.Eq(1-(2*(c**2+d**2)),R[0,0])
                 e2 = sym.Eq(1-(2*(b**2+d**2)),R[1,1])
