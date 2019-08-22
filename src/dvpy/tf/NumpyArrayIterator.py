@@ -122,8 +122,8 @@ class NumpyArrayIterator(IteratorBase):
                 xx, x_len, x_n = dv.tf.change_of_direction_vector_after_augment(x_d,rotation,scale)
                 yy, y_len, y_n = dv.tf.change_of_direction_vector_after_augment(y_d,rotation,scale)
                 zz, z_len, z_n = dv.tf.change_of_direction_vector_after_augment(z_d,rotation,scale)
-                RS = np.array([xx,yy,zz])
-                
+                RS = np.array([[xx[0],yy[0],zz[0]],[xx[1],yy[1],zz[1]],[xx[2],yy[2],zz[2]]])
+                print(RS)
                 S = np.array([[x_len,0,0],[0,y_len,0],[0,0,z_len]])
                 R = RS.dot(np.linalg.inv(S))
                 print(R,'\n')
