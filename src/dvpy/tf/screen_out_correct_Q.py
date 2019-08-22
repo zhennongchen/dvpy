@@ -1,4 +1,4 @@
-def screen_out(vector,R):
+def screen_out_correct_Q(vector,R):
     if len(vector) != 4:
         print('wrong length!!\n')
     [a,b,c,d] = [vector[0],vector[1],vector[2],vector[3]]
