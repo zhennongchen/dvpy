@@ -123,7 +123,7 @@ class NumpyArrayIterator(IteratorBase):
                 yy, y_len, y_n = dv.tf.change_of_direction_vector_after_augment(y_d,rotation,scale)
                 zz, z_len, z_n = dv.tf.change_of_direction_vector_after_augment(z_d,rotation,scale)
                 RS = np.array([xx,yy,zz])
-                print(RS.shape)
+                
                 S = np.array([[x_len,0,0],[0,y_len,0],[0,0,z_len]])
                 R = RS.dot(np.linalg.inv(S))
                 a,b,c,d = sym.symbols('a,b,c,d')
@@ -137,6 +137,7 @@ class NumpyArrayIterator(IteratorBase):
                 for i in range(0,len(Ans)):
                     if dv.tf.screen_out_correct_Q(Ans[i],R) == 1:
                         num.append(i)
+                print(num)
                 if len(num) != 1:
                     print('wrong number of solved result!!\n')
                 QQ = Ans[num[0]][1:4]
