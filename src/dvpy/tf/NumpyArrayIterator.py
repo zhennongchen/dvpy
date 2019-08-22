@@ -135,9 +135,9 @@ class NumpyArrayIterator(IteratorBase):
                 Ans = sym.solve([e1,e2,e3,e4],(a,b,c,d))
                 # screen out the correct one from Ans
                 num = []
-                for i in range(0,len(Ans)):
-                    if dv.tf.screen_out_correct_Q(Ans[i],R) == 1:
-                        num.append(i)
+                for nn in range(0,len(Ans)):
+                    if dv.tf.screen_out_correct_Q(Ans[nn],R) == 1:
+                        num.append(nn)
                 
                 if len(num) != 1:
                     print('wrong number of solved result!!\n')
