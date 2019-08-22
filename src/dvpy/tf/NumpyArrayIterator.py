@@ -142,7 +142,7 @@ class NumpyArrayIterator(IteratorBase):
                 if len(num) != 1:
                     print('wrong number of solved result!!\n')
                 Q = Ans[num[0]][1:4]
-                Q = np.asarray(Ans)
+                Q = np.asarray(Q)
                 Q = Q.reshape(3,)
                 
 
