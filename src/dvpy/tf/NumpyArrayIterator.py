@@ -140,9 +140,9 @@ class NumpyArrayIterator(IteratorBase):
                 print(num)
                 if len(num) != 1:
                     print('wrong number of solved result!!\n')
-                QQ = Ans[num[0]][1:4]
-                QQ = np.asarray(Ans)
-                QQ = QQ.reshape(3,)
+                Q = Ans[num[0]][1:4]
+                Q = np.asarray(Ans)
+                Q = Q.reshape(3,)
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -153,7 +153,7 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = t_o_n
-            batch_y3[i] = QQ
+            batch_y3[i] = Q
             batch_y4[i] = y_n
             
         ##
