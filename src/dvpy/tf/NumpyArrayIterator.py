@@ -75,7 +75,7 @@ class NumpyArrayIterator(IteratorBase):
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
         batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
      
 
         ##
@@ -123,10 +123,10 @@ class NumpyArrayIterator(IteratorBase):
                 yy, y_len, y_n = dv.tf.change_of_direction_vector_after_augment(y_d,rotation,scale)
                 zz, z_len, z_n = dv.tf.change_of_direction_vector_after_augment(z_d,rotation,scale)
                 RS = np.array([[xx[0],yy[0],zz[0]],[xx[1],yy[1],zz[1]],[xx[2],yy[2],zz[2]]])
-                print(RS)
+                
                 S = np.array([[x_len,0,0],[0,y_len,0],[0,0,z_len]])
                 R = RS.dot(np.linalg.inv(S))
-                print(R,'\n')
+                
                 a,b,c,d = sym.symbols('a,b,c,d')
                 e1 = sym.Eq(1-(2*(c**2+d**2)),R[0,0])
                 e2 = sym.Eq(1-(2*(b**2+d**2)),R[1,1])
@@ -138,7 +138,7 @@ class NumpyArrayIterator(IteratorBase):
                 for i in range(0,len(Ans)):
                     if dv.tf.screen_out_correct_Q(Ans[i],R) == 1:
                         num.append(i)
-                print(num)
+                
                 if len(num) != 1:
                     print('wrong number of solved result!!\n')
                 Q = Ans[num[0]][1:4]
@@ -155,7 +155,7 @@ class NumpyArrayIterator(IteratorBase):
             batch_y1[i] = label
             batch_y2[i] = t_o_n
             batch_y3[i] = Q
-            batch_y4[i] = y_n
+            #batch_y4[i] = y_n
             
         ##
         ## Return
@@ -170,7 +170,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3]
             )
         }
         
