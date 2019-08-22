@@ -168,7 +168,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
             )
         }
         
