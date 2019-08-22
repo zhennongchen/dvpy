@@ -105,7 +105,7 @@ class NumpyArrayIterator(IteratorBase):
             pad_v = np.load(pad_path)
 
             # extract all parameters
-            [Q, t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale] = [M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9]]
+            [Q, t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale,t_c,t_c_n] = [M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11]]
             # origin after padding
             image_o = [0,0,0]+pad_v
             mpr_o = [0,0,0] + t_o + pad_v
@@ -116,7 +116,7 @@ class NumpyArrayIterator(IteratorBase):
                 x, label,translation,rotation,scale,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
                
                 #translation vector change
-                translation_n = dv.tf.change_of_translation_vector_after_augment(image_o,mpr_o,transform_matrix,adapt_size)
+                t_o_n = dv.tf.change_of_translation_vector_after_augment(image_o,mpr_o,transform_matrix,adapt_size)
                
                 # direction vector change
                 xx, x_len, x_n = dv.tf.change_of_direction_vector_after_augment(x_d,rotation,scale)
@@ -152,7 +152,7 @@ class NumpyArrayIterator(IteratorBase):
                 batch_x[i] = x
 
             batch_y1[i] = label
-            batch_y2[i] = translation_n
+            batch_y2[i] = t_o_n
             batch_y3[i] = QQ
             batch_y4[i] = y_n
             
