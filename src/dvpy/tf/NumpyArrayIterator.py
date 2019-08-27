@@ -75,7 +75,7 @@ class NumpyArrayIterator(IteratorBase):
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
         batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        #batch_y4=np.zeros(tuple([current_batch_size])+(3,))
+        batch_y4=np.zeros(tuple([current_batch_size])+(1,))
      
 
         ##
@@ -99,16 +99,16 @@ class NumpyArrayIterator(IteratorBase):
                 label = self.output_adapter(label)
             #Retrieve the path to the matrix npy file (the original translation vector)
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
-            affine_path = os.path.join(patient_id,'affine/2C.npy')
+            affine_path = os.path.join(patient_id,'affine/2C_new.npy')
             M = np.load(affine_path)
             pad_path = os.path.join(patient_id,'affine/padding_coordinate_conversion.npy')
             pad_v = np.load(pad_path)
 
             # extract all parameters
-            [Q, t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale,t_c,t_c_n] = [M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11]]
-            # origin after padding
-            image_o = [0,0,0]+pad_v
-            mpr_o = [0,0,0] + t_o + pad_v
+            [Q, axis, angle, t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale, t_c, t_c_n, img_center] = [M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11],M[12],M[13],M[14]]
+            # center after padding
+            image_center = img_center + pad_v
+            mpr_center = img_center + t_c + pad_v
 
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
@@ -116,7 +116,7 @@ class NumpyArrayIterator(IteratorBase):
                 x, label,translation,rotation,scale,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
                
                 #translation vector change
-                t_o_n = dv.tf.change_of_translation_vector_after_augment(image_o,mpr_o,transform_matrix,adapt_size)
+                t_c_n = dv.tf.change_of_translation_vector_after_augment(image_center, mpr_center ,transform_matrix,adapt_size)
                
                 # direction vector change
                 xx, x_len, x_n = dv.tf.change_of_direction_vector_after_augment(x_d,rotation,scale)
@@ -124,6 +124,7 @@ class NumpyArrayIterator(IteratorBase):
                 zz, z_len, z_n = dv.tf.change_of_direction_vector_after_augment(z_d,rotation,scale)
                 RS = np.array([[xx[0],yy[0],zz[0]],[xx[1],yy[1],zz[1]],[xx[2],yy[2],zz[2]]])
                 
+                # Quaternion change
                 S = np.array([[x_len,0,0],[0,y_len,0],[0,0,z_len]])
                 R = RS.dot(np.linalg.inv(S))
                 
@@ -144,6 +145,9 @@ class NumpyArrayIterator(IteratorBase):
                 Q = Ans[num[0]][1:4]
                 Q = np.asarray(Q)
                 Q = Q.reshape(3,)
+
+                # rotate axis and rotate angle:
+                new_angle, new_axis = dv.tf.decompositeQ(Q)
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -153,9 +157,9 @@ class NumpyArrayIterator(IteratorBase):
                 batch_x[i] = x
 
             batch_y1[i] = label
-            batch_y2[i] = t_o_n
-            batch_y3[i] = Q
-            #batch_y4[i] = y_n
+            batch_y2[i] = t_c_n
+            batch_y3[i] = new_axis
+            batch_y4[i] = new_angle
             
         ##
         ## Return
@@ -170,7 +174,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3]
+                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
             )
         }
         

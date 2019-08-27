@@ -14,6 +14,7 @@ from .ImageDataGenerator import *
 from .change_of_translation_vector_after_augment import *
 from .change_of_direction_vector_after_augment import *
 from .screen_out_correct_Q import *
+from .decompositeQ import *
 
 __all__ = [
     "balanced_categorical_crossentropy",
@@ -34,4 +35,5 @@ __all__ = [
     "change_of_translation_vector_after_augment",
     "change_of_direction_vector_after_augment",
     "screen_out_correct_Q",
+    "decompositeQ",
 ]
