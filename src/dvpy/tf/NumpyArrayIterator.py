@@ -147,7 +147,7 @@ class NumpyArrayIterator(IteratorBase):
                 Q = Q.reshape(3,)
 
                 # rotate axis and rotate angle:
-                new_angle, new_axis = dv.tf.decompositeQ(Q)
+                angle, axis = dv.tf.decompositeQ(Q)
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -158,8 +158,8 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = t_c_n
-            batch_y3[i] = new_axis
-            batch_y4[i] = new_angle
+            batch_y3[i] = axis
+            batch_y4[i] = angle
             
         ##
         ## Return
