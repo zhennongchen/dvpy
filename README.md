@@ -7,6 +7,9 @@ The only dependency *not* installed by default is tensorflow, as we do not want 
 
     $ pipenv install tensorflow # CPU
     $ pipenv install tensorflow-gpu # GPU
+    $ use pip install tensorflow-gpu==1.10.0 to install tensorflow
+    $ only the CUDA-9.0 version is compatible with tensorflow 1.10.0, so check the CUDA version first
+    $ if not 9.0, use https://yangcha.github.io/CUDA90/ to install
 
 # Run tests:
 
