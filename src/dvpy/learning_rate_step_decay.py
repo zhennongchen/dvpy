@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def learning_rate_step_decay(epoch, lr, step=100, initial_power=-4):
+def learning_rate_step_decay(epoch, lr, step=25, initial_power=-3):
     """
     The learning rate begins at 10^initial_power,
     and decreases by a factor of 10 every `step` epochs.
