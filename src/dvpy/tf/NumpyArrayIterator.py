@@ -75,7 +75,7 @@ class NumpyArrayIterator(IteratorBase):
         )
         batch_y2=np.zeros(tuple([current_batch_size])+(3,))
         batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(1,))
+        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
      
 
         ##
@@ -121,33 +121,8 @@ class NumpyArrayIterator(IteratorBase):
                 # direction vector change
                 xx, x_len, x_n = dv.tf.change_of_direction_vector_after_augment(x_d,rotation,scale)
                 yy, y_len, y_n = dv.tf.change_of_direction_vector_after_augment(y_d,rotation,scale)
-                zz, z_len, z_n = dv.tf.change_of_direction_vector_after_augment(z_d,rotation,scale)
-                RS = np.array([[xx[0],yy[0],zz[0]],[xx[1],yy[1],zz[1]],[xx[2],yy[2],zz[2]]])
+                #zz, z_len, z_n = dv.tf.change_of_direction_vector_after_augment(z_d,rotation,scale)
                 
-                # Quaternion change
-                S = np.array([[x_len,0,0],[0,y_len,0],[0,0,z_len]])
-                R = RS.dot(np.linalg.inv(S))
-                
-                a,b,c,d = sym.symbols('a,b,c,d')
-                e1 = sym.Eq(1-(2*(c**2+d**2)),R[0,0])
-                e2 = sym.Eq(1-(2*(b**2+d**2)),R[1,1])
-                e3 = sym.Eq(1-(2*(b**2+c**2)),R[2,2])
-                e4 = sym.Eq(1-b**2-c**2-d**2,a**2)
-                Ans = sym.solve([e1,e2,e3,e4],(a,b,c,d))
-                # screen out the correct one from Ans
-                num = []
-                for nn in range(0,len(Ans)):
-                    if dv.tf.screen_out_correct_Q(Ans[nn],R) == 1:
-                        num.append(nn)
-                
-                if len(num) != 1:
-                    print('wrong number of solved result!!\n')
-                Q = Ans[num[0]][1:4]
-                Q = np.asarray(Q)
-                Q = Q.reshape(3,)
-
-                # rotate axis and rotate angle:
-                angle, axis = dv.tf.decompositeQ(Q)
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -158,8 +133,8 @@ class NumpyArrayIterator(IteratorBase):
 
             batch_y1[i] = label
             batch_y2[i] = t_c_n
-            batch_y3[i] = axis
-            batch_y4[i] = angle
+            batch_y3[i] = x_n
+            batch_y4[i] = y_n
             
         ##
         ## Return
