@@ -60,6 +60,7 @@ from .wrapped_phase_difference import *
 from .wrap_phase import *
 from .normalize_image import *
 from .zc_random import *
+from .learning_rate_step_decay2 import *
 
 __all__ = [
     "AugmentationParameters",
@@ -104,6 +105,7 @@ __all__ = [
     "lagrangian_strain_tensor",
     "latex_macro",
     "learning_rate_step_decay",
+    "learning_rate_step_decay2",
     "mask_to_transform",
     "nii_vol_to_slices",
     "normalize",
