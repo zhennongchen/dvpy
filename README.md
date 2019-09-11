@@ -1,3 +1,8 @@
+# SSH:
+ssh zchen@contijoch-bayern.ucsd.edu
+pwd:
+ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" zchen@contijoch-bayern.ucsd.edu 
+
 # Install:
 
     $ pipenv install git+https://github.com/dvigneault/dvpy.git#egg=dvpy
