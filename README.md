@@ -1,6 +1,9 @@
 # SSH:
     $ ssh zchen@contijoch-bayern.ucsd.edu
-    $ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" zchen@contijoch-bayern.ucsd.edu 
+    $ ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" zchen@contijoch-bayern.ucsd.edu 
+
+# file:
+    $ /media/ExtraDrive1/workspaces
 
 # Install:
 
