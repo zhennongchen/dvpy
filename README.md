@@ -18,6 +18,7 @@ The only dependency *not* installed by default is tensorflow, as we do not want 
     $ only the CUDA-9.0 version is compatible with tensorflow 1.10.0, so check the CUDA version first
     $ if not 9.0, use https://yangcha.github.io/CUDA90/ to install
 
+    $ use keras 2.2.4 pip install keras==2.2.4
 # Run tests:
 
 ## Clone the repository:
