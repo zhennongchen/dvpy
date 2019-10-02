@@ -99,30 +99,36 @@ class NumpyArrayIterator(IteratorBase):
                 label = self.output_adapter(label)
             #Retrieve the path to the matrix npy file (the original translation vector)
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
-            affine_path = os.path.join(patient_id,'affine/BASAL_new.npy')
+            affine_path = os.path.join(patient_id,'affine/LV_len.npy')
             M = np.load(affine_path,allow_pickle=True)
             pad_path = os.path.join(patient_id,'affine/padding_coordinate_conversion.npy')
             pad_v = np.load(pad_path,allow_pickle=True)
 
             # extract all parameters
-            [Q, axis, angle, t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale, t_c, t_c_n, img_center] = [M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11],M[12],M[13],M[14]]
+            #[Q, axis, angle, t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale, t_c, t_c_n, img_center] = [M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11],M[12],M[13],M[14]]
             # center after padding
-            image_center = img_center + pad_v
-            mpr_center = img_center + t_c + pad_v
+            #image_center = img_center + pad_v
+            #mpr_center = img_center + t_c + pad_v
 
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
                 x, label,translation,rotation,scale,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
-               
+                
+
                 #translation vector change
-                t_c_n = dv.tf.change_of_translation_vector_after_augment(image_center, mpr_center ,transform_matrix,adapt_size)
+                #t_c_n = dv.tf.change_of_translation_vector_after_augment(image_center, mpr_center ,transform_matrix,adapt_size)
                
                 # direction vector change
-                xx, x_len, x_n = dv.tf.change_of_direction_vector_after_augment(x_d,rotation,scale)
-                yy, y_len, y_n = dv.tf.change_of_direction_vector_after_augment(y_d,rotation,scale)
+                #xx, x_len, x_n = dv.tf.change_of_direction_vector_after_augment(x_d,rotation,scale)
+                #yy, y_len, y_n = dv.tf.change_of_direction_vector_after_augment(y_d,rotation,scale)
                 #zz, z_len, z_n = dv.tf.change_of_direction_vector_after_augment(z_d,rotation,scale)
-                
+
+                # LV length change 
+                scale_x = scale[0,0]; scale_y = scale[1,1]; scale_z = scale[2,2]
+                assert scale_x == scale_y,"scale is not identity"
+                assert scale_x == scale_z,"scale is not identity"
+                M = M * scale_x
                 
 
             # Normalize the *individual* images to zero mean and unit std
@@ -132,7 +138,7 @@ class NumpyArrayIterator(IteratorBase):
                 batch_x[i] = x
 
             batch_y1[i] = label
-            batch_y2[i] = 1
+            batch_y2[i] = M
             #batch_y3[i] = x_n
             #batch_y4[i] = y_n
             
