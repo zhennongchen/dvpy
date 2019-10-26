@@ -17,6 +17,7 @@ class NumpyArrayIterator(IteratorBase):
         y,
         image_data_generator,
         batch_size=32,
+        view = None,
         shuffle=False,
         seed=None,
         input_adapter=None,
@@ -42,6 +43,7 @@ class NumpyArrayIterator(IteratorBase):
         self.X = X
         self.y = y
         self.image_data_generator = image_data_generator
+        self.view = view
         self.input_adapter = input_adapter
         self.output_adapter = output_adapter
         self.shape = shape
@@ -99,7 +101,8 @@ class NumpyArrayIterator(IteratorBase):
                 label = self.output_adapter(label)
             #Retrieve the path to the matrix npy file (the original translation vector)
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
-            affine_path = os.path.join(patient_id,'affine/2C_new.npy')
+            affine_path = os.path.join(patient_id,'affine',view_'_new.npy')
+            print(affine_path)
             M = np.load(affine_path,allow_pickle=True)
             pad_path = os.path.join(patient_id,'affine/padding_coordinate_conversion.npy')
             pad_v = np.load(pad_path,allow_pickle=True)
