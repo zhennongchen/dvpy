@@ -100,6 +100,7 @@ class NumpyArrayIterator(IteratorBase):
                 # ...and convert the path to a one-hot encoded image.
                 label = self.output_adapter(label)
             #Retrieve the path to the matrix npy file (the original translation vector)
+            print('THIS IS NEW DVPY\nTHIS IS NEW DVPY')
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
             affine_path = os.path.join(patient_id,'affine_standard',self.view+'.npy')
            
