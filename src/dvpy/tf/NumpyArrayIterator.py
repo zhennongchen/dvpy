@@ -102,7 +102,7 @@ class NumpyArrayIterator(IteratorBase):
             #Retrieve the path to the matrix npy file (the original translation vector)
             
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
-            affine_path = os.path.join(patient_id,'affine_standard',self.view+'.npy')
+            affine_path = os.path.join(patient_id,'affine_standard',self.view+'_MR.npy')
            
             M = np.load(affine_path,allow_pickle=True)
             pad_path = os.path.join(patient_id,'affine_standard/padding_coordinate_conversion.npy')
