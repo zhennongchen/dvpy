@@ -100,6 +100,39 @@ class ImageDataGenerator(object):
             normalize=normalize,
         )
 
+    def predict_flow(
+        self,
+        X,
+        y=None,
+        batch_size=32,
+        view = None,
+        shuffle=True,
+        seed=None,
+        input_adapter=None,
+        output_adapter=None,
+        shape=None,
+        input_channels=None,
+        output_channels=None,
+        augment=False,
+        normalize=False,
+    ):
+        return dv.tf.PredictIterator(
+            X,
+            y,
+            self,
+            batch_size=batch_size,
+            view = view,
+            shuffle=shuffle,
+            seed=seed,
+            input_adapter=input_adapter,
+            output_adapter=output_adapter,
+            shape=shape,
+            input_channels=input_channels,
+            output_channels=output_channels,
+            augment=augment,
+            normalize=normalize,
+        )
+
     def random_transform(self, x, y):
 
         translation,rotation,scale,transform_matrix_raw= dv.generate_random_transform(
