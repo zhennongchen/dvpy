@@ -32,14 +32,14 @@ class PredictIterator(IteratorBase):
         if K.image_dim_ordering() != "tf":
             raise Exception("Only tensorflow backend is supported.")
 
-        if len(X) != len(y):
+        # if len(X) != len(y):
 
-            raise Exception(
-                "X (images tensor) and y (labels) "
-                "should have the same length. "
-                "Found: X.shape = %s, y.shape = %s"
-                % (np.asarray(X).shape, np.asarray(y).shape)
-            )
+        #     raise Exception(
+        #         "X (images tensor) and y (labels) "
+        #         "should have the same length. "
+        #         "Found: X.shape = %s, y.shape = %s"
+        #         % (np.asarray(X).shape, np.asarray(y).shape)
+        #     )
         self.X = X
         self.y = y
         self.image_data_generator = image_data_generator
