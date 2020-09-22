@@ -98,7 +98,7 @@ class NumpyArrayIterator(IteratorBase):
 
             if self.output_adapter is not None:
                 # ...and convert the path to a one-hot encoded image.
-                label = self.output_adapter(label,relabel_LVOT)
+                label = self.output_adapter(label,self.relabel_LVOT)
             #Retrieve the path to the matrix npy file (the original translation vector)
             
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
