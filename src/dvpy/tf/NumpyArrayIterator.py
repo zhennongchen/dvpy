@@ -109,7 +109,7 @@ class NumpyArrayIterator(IteratorBase):
             pad_v = np.load(pad_path,allow_pickle=True)
 
             # extract all parameters
-            [~, ~, ~, t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale, t_c, t_c_n, img_center] = [M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11],M[12],M[13],M[14]]
+            [t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale, t_c, t_c_n, img_center] = [M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11],M[12],M[13],M[14]]
             # center after padding
             image_center = img_center + pad_v
             mpr_center = img_center + t_c + pad_v
