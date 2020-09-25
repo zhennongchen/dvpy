@@ -88,6 +88,7 @@ class NumpyArrayIterator(IteratorBase):
 
             # Retrieve the path to the input image...
             x = self.X[j]
+            print(x)
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
@@ -103,7 +104,6 @@ class NumpyArrayIterator(IteratorBase):
             
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
             affine_path = os.path.join(patient_id,'affine_standard',self.view+'_MR.npy')
-           
             M = np.load(affine_path,allow_pickle=True)
             pad_path = os.path.join(patient_id,'affine_standard/padding_coordinate_conversion.npy')
             pad_v = np.load(pad_path,allow_pickle=True)
