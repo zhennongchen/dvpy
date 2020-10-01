@@ -18,6 +18,7 @@ class PredictIterator(IteratorBase):
         image_data_generator,
         batch_size=32,
         view = None,
+        relabel_LVOT = None,
         shuffle=False,
         seed=None,
         input_adapter=None,
@@ -44,6 +45,7 @@ class PredictIterator(IteratorBase):
         self.y = y
         self.image_data_generator = image_data_generator
         self.view = view
+        self.relabel_LVOT = relabel_LVOT
         self.input_adapter = input_adapter
         self.output_adapter = output_adapter
         self.shape = shape
@@ -92,9 +94,6 @@ class PredictIterator(IteratorBase):
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
-                #adapt_size=x.shape
-
-            
 
             # Normalize the *individual* images to zero mean and unit std
             if self.normalize:
