@@ -36,7 +36,6 @@ class IteratorBase(object):
 
     def _flow_index(self, N, batch_size=32, slice_num = 96, shuffle=False, seed=None):
         # ensure self.batch_index is 0
-        print(N,slice_num)
         self.reset()
         while True:
             if self.batch_index == 0:
