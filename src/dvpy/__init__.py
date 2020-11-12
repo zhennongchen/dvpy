@@ -1,4 +1,4 @@
-#from . import tf
+from . import tf
 from . import tf_2d
 
 from .AugmentationParameters import *

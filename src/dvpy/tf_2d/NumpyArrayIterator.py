@@ -17,6 +17,7 @@ class NumpyArrayIterator(IteratorBase):
         y,
         image_data_generator,
         batch_size=32,
+        slice_num = None,
         view = None,
         relabel_LVOT = None,
         shuffle=False,
@@ -44,6 +45,7 @@ class NumpyArrayIterator(IteratorBase):
         self.X = X
         self.y = y
         self.image_data_generator = image_data_generator
+        self.slice_num = slice_num
         self.view = view
         self.relabel_LVOT = relabel_LVOT
         self.input_adapter = input_adapter
@@ -53,15 +55,15 @@ class NumpyArrayIterator(IteratorBase):
         self.output_channels = output_channels
         self.augment = augment
         self.normalize = normalize
-        super(NumpyArrayIterator, self).__init__(X.shape[0], batch_size, shuffle, seed)
+        super(NumpyArrayIterator, self).__init__(X.shape[0], batch_size, slice_num, shuffle, seed)
 
     def next(self):
-        print('I AM USING TF_2D!!!!!')
         # for python 2.x.
         # Keeps under lock only the mechanism which advances
         # the indexing of each batch
         # see http://anandology.com/blog/using-iterators-and-generators/
         with self.lock:
+            # index_array is a randomly shuffled list of cases for this batch
             index_array, current_index, current_batch_size = next(self.index_generator)
             print('In numpy Array Iterator, index_array, current_index and current batch size = ',index_array, current_index, current_batch_size)
         # The transformation of images is not under thread lock so it can be done in parallel
@@ -79,69 +81,41 @@ class NumpyArrayIterator(IteratorBase):
         batch_y1= np.zeros(
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
-        batch_y2=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
-     
+    
 
+        # load the volume data
+        volume_num = index_array[0][0]
+        # image
+        x = self.X[volume_num]
+        print('The volume is ',x, volume_num)
+        if self.input_adapter is not None:
+            x = self.input_adapter(x)
+            adapt_size = x.shape
+            print('adapted volume has dimension, ',adapt_size)
+        if self.normalize == 1:
+            x = dv.normalize_image(x)
 
-        # index_array is a randomly shuffled list of cases for this batch
+        # segmentation
+        label = self.y[volume_num]
+        print('The seg is ',label, volume_num)
+        if self.output_adapter is not None:
+            # ...and convert the path to a one-hot encoded image.
+            label = self.output_adapter(label,self.relabel_LVOT)
+            print('adapted segmentation has dimension ',label.shape)
+
+        # load slice
         for i, j in enumerate(index_array):
-
-            # Retrieve the path to the input image...
-            x = self.X[j]
-            print('X is ',x, j)
-            # ...and convert the path to a raw (unnormalized) image.
-            if self.input_adapter is not None:
-                x = self.input_adapter(x)
-                print('adapted X has dimension ',x.shape)
-                adapt_size=x.shape
-
-            # Retrieve the path to the segmentation...
-            label = self.y[j]
-            print('Y is ',label, j)
-
-            if self.output_adapter is not None:
-                # ...and convert the path to a one-hot encoded image.
-                label = self.output_adapter(label,self.relabel_LVOT)
-                print('adapted Y has dimension ',label.shape)
-            #Retrieve the path to the matrix npy file (the original translation vector)
-            
-            patient_id = os.path.dirname(os.path.dirname(self.X[j]))
-            affine_path = os.path.join(patient_id,'affine_standard',self.view+'_MR.npy')
-            M = np.load(affine_path,allow_pickle=True)
-            pad_path = os.path.join(patient_id,'affine_standard/padding_coordinate_conversion.npy')
-            pad_v = np.load(pad_path,allow_pickle=True)
-
-            # extract all parameters
-            [t_o, t_o_n, x_d, x_n, y_d, y_n, z_d, z_n, scale, t_c, t_c_n, img_center] = [M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11],M[12],M[13],M[14]]
-            # center after padding
-            image_center = img_center + pad_v
-            mpr_center = img_center + t_c + pad_v
-
+            assert j[0] == volume_num
+            print('slice num is ', j[1])
+            image = x[:,:,j[1],:]   # !!!!
+            seg = label[:,:,j[1],:]
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
-                x, label,translation,rotation,scale,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
+                image, seg,_,_,_,_ = self.image_data_generator.random_transform(image.astype("float32"), seg.astype("float32"))
                 
-                #translation vector change
-                t_c_n = dv.tf_2d.change_of_translation_vector_after_augment(image_center, mpr_center ,transform_matrix,adapt_size)
-               
-                # direction vector change
-                xx, x_len, x_n = dv.tf_2d.change_of_direction_vector_after_augment(x_d,rotation,scale)
-                yy, y_len, y_n = dv.tf_2d.change_of_direction_vector_after_augment(y_d,rotation,scale)
-
-
-            # Normalize the *individual* images to zero mean and unit std
-            if self.normalize:
-                batch_x[i] = dv.normalize_image(x)
-            else:
-                batch_x[i] = x
-
-            batch_y1[i] = label
-            batch_y2[i] = t_c_n
-            batch_y3[i] = x_n
-            batch_y4[i] = y_n
+            batch_x[i] = image
+            batch_y1[i] = seg
             
         ##
         ## Return
@@ -156,7 +130,7 @@ class NumpyArrayIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
+                self.image_data_generator.output_layer_names, [batch_y1]
             )
         }
         
