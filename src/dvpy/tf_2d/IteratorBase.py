@@ -19,7 +19,7 @@ class IteratorBase(object):
         "index_generator",
     ]
 
-    def __init__(self, N, batch_size, shuffle, seed, slice_num):
+    def __init__(self, N, batch_size, slice_num,shuffle, seed):
         self.N = N  # the number of total cases
         self.batch_size = batch_size
         self.shuffle = shuffle # whether the index_list is randomized
