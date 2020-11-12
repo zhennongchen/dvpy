@@ -4,7 +4,7 @@
 import tensorflow as tf
 
 # Internal
-import dvpy.tf
+import dvpy.tf_2d
 
 
 def wrapped_phase_difference(y_true, y_pred):
@@ -16,9 +16,9 @@ def wrapped_phase_difference(y_true, y_pred):
 
     diff = y_pred - y_true
     diff -= tf.multiply(
-        tf.cast(tf.greater_equal(diff, dvpy.tf.pi), "float32"), 2.0 * dvpy.tf.pi
+        tf.cast(tf.greater_equal(diff, dvpy.tf_2d.pi), "float32"), 2.0 * dvpy.tf_2d.pi
     )
     diff += tf.multiply(
-        tf.cast(tf.less(diff, -dvpy.tf.pi), "float32"), 2.0 * dvpy.tf.pi
+        tf.cast(tf.less(diff, -dvpy.tf_2d.pi), "float32"), 2.0 * dvpy.tf_2d.pi
     )
     return diff
