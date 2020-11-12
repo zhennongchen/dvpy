@@ -106,9 +106,9 @@ class NumpyArrayIterator(IteratorBase):
         # load slice
         for i, j in enumerate(index_array):
             assert j[0] == volume_num
-            print('slice num is ', j[1])
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
+            print('input size ', image.shape, ' output size ',seg.shape)
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
