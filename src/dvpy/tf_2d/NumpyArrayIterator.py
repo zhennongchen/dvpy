@@ -126,8 +126,8 @@ class NumpyArrayIterator(IteratorBase):
                 t_c_n = dv.tf.change_of_translation_vector_after_augment(image_center, mpr_center ,transform_matrix,adapt_size)
                
                 # direction vector change
-                xx, x_len, x_n = dv.tf.change_of_direction_vector_after_augment(x_d,rotation,scale)
-                yy, y_len, y_n = dv.tf.change_of_direction_vector_after_augment(y_d,rotation,scale)
+                xx, x_len, x_n = dv.tf_2d.change_of_direction_vector_after_augment(x_d,rotation,scale)
+                yy, y_len, y_n = dv.tf_2d.change_of_direction_vector_after_augment(y_d,rotation,scale)
 
 
             # Normalize the *individual* images to zero mean and unit std
