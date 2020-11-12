@@ -90,7 +90,7 @@ class NumpyArrayIterator(IteratorBase):
 
             # Retrieve the path to the input image...
             x = self.X[j]
-            print('X is ',x)
+            print('X is ',x, j)
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
@@ -98,7 +98,7 @@ class NumpyArrayIterator(IteratorBase):
 
             # Retrieve the path to the segmentation...
             label = self.y[j]
-            print('Y is ',label)
+            print('Y is ',label, j )
 
             if self.output_adapter is not None:
                 # ...and convert the path to a one-hot encoded image.
@@ -123,7 +123,7 @@ class NumpyArrayIterator(IteratorBase):
                 x, label,translation,rotation,scale,transform_matrix = self.image_data_generator.random_transform(x.astype("float32"), label.astype("float32"))
                 
                 #translation vector change
-                t_c_n = dv.tf.change_of_translation_vector_after_augment(image_center, mpr_center ,transform_matrix,adapt_size)
+                t_c_n = dv.tf_2d.change_of_translation_vector_after_augment(image_center, mpr_center ,transform_matrix,adapt_size)
                
                 # direction vector change
                 xx, x_len, x_n = dv.tf_2d.change_of_direction_vector_after_augment(x_d,rotation,scale)
