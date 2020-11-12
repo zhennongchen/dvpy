@@ -39,7 +39,6 @@ class IteratorBase(object):
         print(N,slice_num)
         self.reset()
         while True:
-            print('batch index = ',self.batch_index)
             if self.batch_index == 0:
                 patient_list = np.random.permutation(N)
                 index_array = []

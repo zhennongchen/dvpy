@@ -87,28 +87,25 @@ class NumpyArrayIterator(IteratorBase):
         volume_num = index_array[0][0]
         # image
         x = self.X[volume_num]
-        print('The volume is ',x, volume_num)
         if self.input_adapter is not None:
             x = self.input_adapter(x)
             adapt_size = x.shape
-            print('adapted volume has dimension, ',adapt_size)
+            
         if self.normalize == 1:
             x = dv.normalize_image(x)
 
         # segmentation
         label = self.y[volume_num]
-        print('The seg is ',label, volume_num)
         if self.output_adapter is not None:
             # ...and convert the path to a one-hot encoded image.
             label = self.output_adapter(label,self.relabel_LVOT)
-            print('adapted segmentation has dimension ',label.shape)
+            
 
         # load slice
         for i, j in enumerate(index_array):
             assert j[0] == volume_num
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
-            print('input size ', image.shape, ' output size ',seg.shape)
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
