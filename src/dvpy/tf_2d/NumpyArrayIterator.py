@@ -65,7 +65,7 @@ class NumpyArrayIterator(IteratorBase):
         with self.lock:
             # index_array is a randomly shuffled list of cases for this batch
             index_array, current_index, current_batch_size = next(self.index_generator)
-            print('In numpy Array Iterator, index_array, current_index and current batch size = ',index_array, current_index, current_batch_size)
+            
         # The transformation of images is not under thread lock so it can be done in parallel
 
         ##
