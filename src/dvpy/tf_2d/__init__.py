@@ -10,6 +10,7 @@ from .wrapped_phase_difference_loss import *
 from .unet import conv_bn_relu_1x, conv_bn_relu, get_unet
 from .IteratorBase import *
 from .NumpyArrayIterator import *
+from .NumpyArrayIterator_predict import *
 from .ImageDataGenerator import *
 from .PredictIterator import * 
 from .change_of_translation_vector_after_augment import *
@@ -32,6 +33,7 @@ __all__ = [
     "wrapped_phase_difference_loss",
     "IteratorBase",
     "NumpyArrayIterator",
+    "NumpyArrayIterator_predict",
     "PredictIterator",
     "ImageDataGenerator",
     "change_of_translation_vector_after_augment",
