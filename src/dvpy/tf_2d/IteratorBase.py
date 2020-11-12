@@ -44,7 +44,7 @@ class IteratorBase(object):
                     if seed is not None:
                         np.random.seed(seed + self.total_batches_seen)
                     index_array = np.random.permutation(N)
-            print('index array = ',index_array)
+                print('index array initialized is ',index_array)
 
             current_index = (self.batch_index * batch_size) % N
             # Should this be >, rather than >=?
