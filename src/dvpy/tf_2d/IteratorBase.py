@@ -43,7 +43,10 @@ class IteratorBase(object):
                 patient_list = np.random.permutation(N)
                 index_array = []
                 for p in patient_list:
-                    slice_list = np.random.permutation(slice_num)
+                    if self.shuffle == True:
+                        slice_list = np.random.permutation(slice_num)
+                    else:
+                        slice_list = np.arange(slice_num)
                     for s in slice_list:
                         index_array.append([p,s])
 
