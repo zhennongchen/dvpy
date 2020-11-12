@@ -94,15 +94,17 @@ class NumpyArrayIterator(IteratorBase):
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
+                print('adapted X has dimension ',x.shape)
                 adapt_size=x.shape
 
             # Retrieve the path to the segmentation...
             label = self.y[j]
-            print('Y is ',label, j )
+            print('Y is ',label, j)
 
             if self.output_adapter is not None:
                 # ...and convert the path to a one-hot encoded image.
                 label = self.output_adapter(label,self.relabel_LVOT)
+                print('adapted Y has dimension ',label.shape)
             #Retrieve the path to the matrix npy file (the original translation vector)
             
             patient_id = os.path.dirname(os.path.dirname(self.X[j]))
