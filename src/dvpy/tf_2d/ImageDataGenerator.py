@@ -84,7 +84,7 @@ class ImageDataGenerator(object):
         augment=False,
         normalize=False,
     ):
-        return dv.tf.NumpyArrayIterator(
+        return dv.tf_2d.NumpyArrayIterator(
             X,
             y,
             self,
@@ -119,7 +119,7 @@ class ImageDataGenerator(object):
         augment=False,
         normalize=False,
     ):
-        return dv.tf.PredictIterator(
+        return dv.tf_2d.PredictIterator(
             X,
             y,
             self,
