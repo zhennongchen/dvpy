@@ -51,7 +51,7 @@ class IteratorBase(object):
                         index_array.append([p,s])
 
                 index_array = np.asarray(index_array)
-                print('initialized index_array = ',index_array)
+                
 
             total_slice = N * slice_num
             current_index = (self.batch_index * batch_size) % total_slice
