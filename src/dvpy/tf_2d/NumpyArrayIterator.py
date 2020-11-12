@@ -56,12 +56,14 @@ class NumpyArrayIterator(IteratorBase):
         super(NumpyArrayIterator, self).__init__(X.shape[0], batch_size, shuffle, seed)
 
     def next(self):
+        print('I AM USING TF_2D!!!!!')
         # for python 2.x.
         # Keeps under lock only the mechanism which advances
         # the indexing of each batch
         # see http://anandology.com/blog/using-iterators-and-generators/
         with self.lock:
             index_array, current_index, current_batch_size = next(self.index_generator)
+            print('In numpy Array Iterator, index_array, current_index and current batch size = ',index_array, current_index, current_batch_size)
         # The transformation of images is not under thread lock so it can be done in parallel
 
         ##
@@ -88,6 +90,7 @@ class NumpyArrayIterator(IteratorBase):
 
             # Retrieve the path to the input image...
             x = self.X[j]
+            print('X is ',x)
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
@@ -95,6 +98,7 @@ class NumpyArrayIterator(IteratorBase):
 
             # Retrieve the path to the segmentation...
             label = self.y[j]
+            print('Y is ',label)
 
             if self.output_adapter is not None:
                 # ...and convert the path to a one-hot encoded image.

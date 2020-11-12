@@ -4,7 +4,7 @@ import threading
 # Third Party
 import numpy as np
 
-
+#
 
 
 class IteratorBase(object):
@@ -37,12 +37,14 @@ class IteratorBase(object):
         # ensure self.batch_index is 0
         self.reset()
         while True:
+            print('batch index = ',self.batch_index)
             if self.batch_index == 0:
                 index_array = np.arange(N)
                 if shuffle:   
                     if seed is not None:
                         np.random.seed(seed + self.total_batches_seen)
                     index_array = np.random.permutation(N)
+            print('index array = ',index_array)
 
             current_index = (self.batch_index * batch_size) % N
             # Should this be >, rather than >=?
@@ -54,6 +56,8 @@ class IteratorBase(object):
                 current_batch_size = N - current_index  # not adequate, should reduce the batch size
                 self.batch_index = 0
             self.total_batches_seen += 1
+            print('current_index = ',current_index)
+            print('current batch size = ',current_batch_size)
             yield (
                 index_array[current_index : current_index + current_batch_size],
                 current_index,
