@@ -54,8 +54,6 @@ class IteratorBase(object):
 
             total_slice = N * slice_num
             current_index = (self.batch_index * batch_size) % total_slice
-            # Should this be >, rather than >=?
-            # https://github.com/tensorflow/tensorflow/blob/r1.2/tensorflow/contrib/keras/python/keras/preprocessing/image.py#L788
             if total_slice >= current_index + batch_size:   # the total number of cases is adequate for next loop
                 current_batch_size = batch_size
                 self.batch_index += 1

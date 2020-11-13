@@ -17,6 +17,7 @@ from .change_of_direction_vector_after_augment import *
 from .screen_out_correct_Q import *
 from .decompositeQ import *
 
+# this all function makes all the constant and functions available to use.
 __all__ = [
     "balanced_categorical_crossentropy",
     "conv_bn_relu_1x",
