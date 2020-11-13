@@ -12,6 +12,7 @@ class IteratorBase(object):
     __slots__ = [
         "N",          
         "batch_size",
+        "slice_num",
         "shuffle",
         "batch_index",
         "total_batches_seen",
@@ -19,43 +20,47 @@ class IteratorBase(object):
         "index_generator",
     ]
 
-    def __init__(self, N, batch_size, slice_num,shuffle, seed):
+    def __init__(self, N, batch_size, slice_num, shuffle, seed):
         self.N = N  # the number of total cases
         self.batch_size = batch_size
+        self.slice_num = slice_num
         self.shuffle = shuffle # whether the index_list is randomized
+        self.seed = seed
 
         self.batch_index = 0 
         self.total_batches_seen = 0 # count how many batches has been input
         self.lock = threading.Lock()
 
 
-        self.index_generator = self._flow_index(N, batch_size, slice_num, shuffle, seed)
+        self.index_generator = self._flow_index()
 
     def reset(self):
         self.batch_index = 0
 
-    def _flow_index(self, N, batch_size=32, slice_num = 96, shuffle=False, seed=None):
+    def _flow_index(self):
         # ensure self.batch_index is 0
+
         self.reset()
         while True:
             if self.batch_index == 0:
-                patient_list = np.random.permutation(N)
+                patient_list = np.random.permutation(self.N)
                 index_array = []
                 for p in patient_list:
                     if self.shuffle == True:
-                        slice_list = np.random.permutation(slice_num)
+                        slice_list = np.random.permutation(self.slice_num)
                     else:
-                        slice_list = np.arange(slice_num)
+                        slice_list = np.arange(self.slice_num)
                     for s in slice_list:
                         index_array.append([p,s])
 
                 index_array = np.asarray(index_array)
-                
+                print(index_array)
 
-            total_slice = N * slice_num
-            current_index = (self.batch_index * batch_size) % total_slice
-            if total_slice >= current_index + batch_size:   # the total number of cases is adequate for next loop
-                current_batch_size = batch_size
+
+            total_slice = self.N * self.slice_num
+            current_index = (self.batch_index * self.batch_size) % total_slice
+            if total_slice >= current_index + self.batch_size:   # the total number of cases is adequate for next loop
+                current_batch_size = self.batch_size
                 self.batch_index += 1
             else:
                 current_batch_size = total_slice - current_index  # not adequate, should reduce the batch size
