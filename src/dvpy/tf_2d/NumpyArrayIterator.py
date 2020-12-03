@@ -88,6 +88,7 @@ class NumpyArrayIterator(IteratorBase):
 
         # load volume + seg:
         x = self.X[index_array[0][0]]
+        print(x)
         if self.input_adapter is not None:
             x = self.input_adapter(x)
             adapt_size = x.shape
@@ -95,6 +96,7 @@ class NumpyArrayIterator(IteratorBase):
             x = dv.normalize_image(x)
         # segmentation
         label = self.y[index_array[0][0]]
+        print(label)
         if self.output_adapter is not None:
             label = self.output_adapter(label,self.relabel_LVOT)
 
@@ -103,7 +105,7 @@ class NumpyArrayIterator(IteratorBase):
         #     index_array = index_array.tolist()
         #     index_array.sort()
         
-        volumes_already_load = []
+        #volumes_already_load = []
         for i, j in enumerate(index_array):
             case = j[0]
             assert case == index_array[0][0]
