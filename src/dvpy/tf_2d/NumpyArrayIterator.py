@@ -125,7 +125,7 @@ class NumpyArrayIterator(IteratorBase):
 
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
-            print(image.shape,seg.shape)
+         
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
