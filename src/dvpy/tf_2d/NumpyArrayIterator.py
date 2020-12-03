@@ -97,7 +97,6 @@ class NumpyArrayIterator(IteratorBase):
             if case in volumes_already_load:
                 continue
             else:
-               
                 volumes_already_load.append(case)
                 # load volume + seg:
                 x = self.X[case]
@@ -113,6 +112,7 @@ class NumpyArrayIterator(IteratorBase):
 
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
+            print(image.shape,label.shape)
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
             if self.augment:
