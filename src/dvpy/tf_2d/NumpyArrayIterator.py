@@ -86,29 +86,42 @@ class NumpyArrayIterator(IteratorBase):
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
 
+        # load volume + seg:
+        x = self.X[index_array[0][0]]
+        if self.input_adapter is not None:
+            x = self.input_adapter(x)
+            adapt_size = x.shape
+        if self.normalize == 1:
+            x = dv.normalize_image(x)
+        # segmentation
+        label = self.y[index_array[0][0]]
+        if self.output_adapter is not None:
+            label = self.output_adapter(label,self.relabel_LVOT)
+
         # load slice
-        if self.shuffle == True:
-            index_array = index_array.tolist()
-            index_array.sort()
+        # if self.shuffle == True:
+        #     index_array = index_array.tolist()
+        #     index_array.sort()
         
         volumes_already_load = []
         for i, j in enumerate(index_array):
             case = j[0]
-            if case in volumes_already_load:
-                continue
-            else:
-                volumes_already_load.append(case)
-                # load volume + seg:
-                x = self.X[case]
-                if self.input_adapter is not None:
-                    x = self.input_adapter(x)
-                    adapt_size = x.shape
-                if self.normalize == 1:
-                    x = dv.normalize_image(x)
-                # segmentation
-                label = self.y[case]
-                if self.output_adapter is not None:
-                    label = self.output_adapter(label,self.relabel_LVOT)
+            assert case == index_array[0][0]
+            # if case in volumes_already_load:
+            #     continue
+            # else:
+            #     volumes_already_load.append(case)
+            #     # load volume + seg:
+            #     x = self.X[case]
+            #     if self.input_adapter is not None:
+            #         x = self.input_adapter(x)
+            #         adapt_size = x.shape
+            #     if self.normalize == 1:
+            #         x = dv.normalize_image(x)
+            #     # segmentation
+            #     label = self.y[case]
+            #     if self.output_adapter is not None:
+            #         label = self.output_adapter(label,self.relabel_LVOT)
 
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
