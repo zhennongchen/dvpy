@@ -16,8 +16,9 @@ class NumpyArrayIterator(IteratorBase):
         X,
         y,
         image_data_generator,
-        batch_size=32,
         slice_num = None,
+        batch_size = None,
+        patients_in_one_batch = None,
         view = None,
         relabel_LVOT = None,
         shuffle=False,
@@ -46,6 +47,8 @@ class NumpyArrayIterator(IteratorBase):
         self.y = y
         self.image_data_generator = image_data_generator
         self.slice_num = slice_num
+        self.batch_size = batch_size
+        self.patients_in_one_batch = patients_in_one_batch
         self.view = view
         self.relabel_LVOT = relabel_LVOT
         self.input_adapter = input_adapter
@@ -55,7 +58,7 @@ class NumpyArrayIterator(IteratorBase):
         self.output_channels = output_channels
         self.augment = augment
         self.normalize = normalize
-        super(NumpyArrayIterator, self).__init__(X.shape[0], batch_size, slice_num, shuffle, seed)
+        super(NumpyArrayIterator, self).__init__(X.shape[0], slice_num, batch_size, patients_in_one_batch, shuffle, seed)
 
     def next(self):
         # for python 2.x.
@@ -82,29 +85,30 @@ class NumpyArrayIterator(IteratorBase):
         batch_y1= np.zeros(
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
-    
-
-        # load the volume data
-        volume_num = index_array[0][0]
-        # image
-        x = self.X[volume_num]
-        if self.input_adapter is not None:
-            x = self.input_adapter(x)
-            adapt_size = x.shape
-            
-        if self.normalize == 1:
-            x = dv.normalize_image(x)
-
-        # segmentation
-        label = self.y[volume_num]
-        if self.output_adapter is not None:
-            # ...and convert the path to a one-hot encoded image.
-            label = self.output_adapter(label,self.relabel_LVOT)
-            
 
         # load slice
+        index_array.sort()
+        print(index_array)
+        volumes_already_load = []
         for i, j in enumerate(index_array):
-            assert j[0] == volume_num
+            case = j[0]
+            if case in volumes_already_load:
+                continue
+            else:
+                print('now load case: ',case)
+                volumes_already_load.append(case)
+                # load volume + seg:
+                x = self.X[case]
+                if self.input_adapter is not None:
+                    x = self.input_adapter(x)
+                    adapt_size = x.shape
+                if self.normalize == 1:
+                    x = dv.normalize_image(x)
+                # segmentation
+                label = self.y[case]
+                if self.output_adapter is not None:
+                    label = self.output_adapter(label,self.relabel_LVOT)
+
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
             # If *training*, we want to augment the data.

@@ -3,6 +3,7 @@ import threading
 
 # Third Party
 import numpy as np
+import random
 
 #
 
@@ -11,8 +12,9 @@ class IteratorBase(object):
 
     __slots__ = [
         "N",          
-        "batch_size",
         "slice_num",
+        "batch_size",
+        "patients_in_one_batch",
         "shuffle",
         "batch_index",
         "total_batches_seen",
@@ -20,18 +22,17 @@ class IteratorBase(object):
         "index_generator",
     ]
 
-    def __init__(self, N, batch_size, slice_num, shuffle, seed):
+    def __init__(self, N, slice_num, batch_size, patients_in_one_batch, shuffle, seed):
         self.N = N  # the number of total cases
-        self.batch_size = batch_size
-        self.slice_num = slice_num
+        self.slice_num = slice_num # num of slices in each case
+        self.batch_size = batch_size # num of slices in each batch
+        self.patients_in_one_batch = patients_in_one_batch # num of cases in each batch
         self.shuffle = shuffle # whether the index_list is randomized
         self.seed = seed
 
         self.batch_index = 0 
         self.total_batches_seen = 0 # count how many batches has been input
         self.lock = threading.Lock()
-
-
         self.index_generator = self._flow_index()
 
     def reset(self):
@@ -53,9 +54,17 @@ class IteratorBase(object):
                     for s in slice_list:
                         index_array.append([p,s])
 
+                if self.shuffle == True: # put several cases into one batch instead of just one case
+                    new_index_array = []
+                    slices_in_one_group = self.patients_in_one_batch * self.slice_num
+                    for i in range(0,int(self.N / self.patients_in_one_batch)):
+                        g = index_array[slices_in_one_group * i:slices_in_one_group * (i+1)]
+                        random.shuffle(g)
+                        new_index_array.extend(g)
+                    index_array = new_index_array
+  
                 index_array = np.asarray(index_array)
                 print(index_array)
-
 
             total_slice = self.N * self.slice_num
             current_index = (self.batch_index * self.batch_size) % total_slice
