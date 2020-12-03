@@ -21,7 +21,7 @@ class NumpyArrayIterator(IteratorBase):
         patients_in_one_batch = None,
         view = None,
         relabel_LVOT = None,
-        shuffle=False,
+        shuffle=None,
         seed=None,
         input_adapter=None,
         output_adapter=None,
@@ -87,8 +87,10 @@ class NumpyArrayIterator(IteratorBase):
         )
 
         # load slice
-        index_array.sort()
-        print(index_array)
+        print('shuffle is: ',self.shuffle)
+        if self.shuffle == True:
+            index_array.sort()
+        print('index_arry in this batch is: ',index_array)
         volumes_already_load = []
         for i, j in enumerate(index_array):
             case = j[0]
