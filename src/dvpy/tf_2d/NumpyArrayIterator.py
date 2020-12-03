@@ -87,18 +87,16 @@ class NumpyArrayIterator(IteratorBase):
         )
 
         # load slice
-        print('shuffle is: ',self.shuffle)
         if self.shuffle == True:
             index_array = index_array.tolist()
             index_array.sort()
-        print('index_arry in this batch is: ',index_array)
+
         volumes_already_load = []
         for i, j in enumerate(index_array):
             case = j[0]
             if case in volumes_already_load:
                 continue
             else:
-                print('now load case: ',case)
                 volumes_already_load.append(case)
                 # load volume + seg:
                 x = self.X[case]
