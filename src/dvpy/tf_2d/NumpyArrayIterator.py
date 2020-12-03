@@ -89,6 +89,7 @@ class NumpyArrayIterator(IteratorBase):
         # load slice
         print('shuffle is: ',self.shuffle)
         if self.shuffle == True:
+            index_array = index_array.tolist()
             index_array.sort()
         print('index_arry in this batch is: ',index_array)
         volumes_already_load = []
