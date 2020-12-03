@@ -94,9 +94,11 @@ class NumpyArrayIterator(IteratorBase):
         volumes_already_load = []
         for i, j in enumerate(index_array):
             case = j[0]
+            print(case)
             if case in volumes_already_load:
                 continue
             else:
+                print('load case: ',case)
                 volumes_already_load.append(case)
                 # load volume + seg:
                 x = self.X[case]

@@ -54,17 +54,17 @@ class IteratorBase(object):
                     for s in slice_list:
                         index_array.append([p,s])
 
-                if self.shuffle == True: # put several cases into one batch instead of just one case
-                    new_index_array = []
-                    slices_in_one_group = self.patients_in_one_batch * self.slice_num
-                    for i in range(0,int(self.N / self.patients_in_one_batch)):
-                        g = index_array[slices_in_one_group * i:slices_in_one_group * (i+1)]
-                        random.shuffle(g)
-                        new_index_array.extend(g)
-                    index_array = new_index_array
+                # if self.shuffle == True: # put several cases into one batch instead of just one case
+                #     new_index_array = []
+                #     slices_in_one_group = self.patients_in_one_batch * self.slice_num
+                #     for i in range(0,int(self.N / self.patients_in_one_batch)):
+                #         g = index_array[slices_in_one_group * i:slices_in_one_group * (i+1)]
+                #         random.shuffle(g)
+                #         new_index_array.extend(g)
+                #     index_array = new_index_array
   
                 index_array = np.asarray(index_array)
-                
+                print(index_array)
 
             total_slice = self.N * self.slice_num
             current_index = (self.batch_index * self.batch_size) % total_slice
