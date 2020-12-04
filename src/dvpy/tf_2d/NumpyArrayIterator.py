@@ -19,7 +19,6 @@ class NumpyArrayIterator(IteratorBase):
         slice_num = None,
         batch_size = None,
         patients_in_one_batch = None,
-        view = None,
         relabel_LVOT = None,
         shuffle=None,
         seed=None,
@@ -30,6 +29,7 @@ class NumpyArrayIterator(IteratorBase):
         output_channels=None,
         augment=False,
         normalize=False,
+        adapted_already = None,
     ):
 
         if K.image_dim_ordering() != "tf":
@@ -58,6 +58,7 @@ class NumpyArrayIterator(IteratorBase):
         self.output_channels = output_channels
         self.augment = augment
         self.normalize = normalize
+        self.adapted_already = adapted_already
         super(NumpyArrayIterator, self).__init__(X.shape[0], slice_num, batch_size, patients_in_one_batch, shuffle, seed)
 
     def next(self):
@@ -101,15 +102,22 @@ class NumpyArrayIterator(IteratorBase):
                 volumes_already_load.append(case)
                 # load volume + seg:
                 x = self.X[case]
-                if self.input_adapter is not None:
-                    x = self.input_adapter(x)
-                    adapt_size = x.shape
-                if self.normalize == 1:
-                    x = dv.normalize_image(x)
-                # segmentation
                 label = self.y[case]
-                if self.output_adapter is not None:
-                    label = self.output_adapter(label,self.relabel_LVOT)
+                if self.adapted_already == 0:
+                    if self.input_adapter is not None:
+                        x = self.input_adapter(x)
+                        adapt_size = x.shape
+                    if self.normalize == 1:
+                        x = dv.normalize_image(x)
+                    # segmentation
+                    if self.output_adapter is not None:
+                        label = self.output_adapter(label,self.relabel_LVOT)
+                elif self.adapted_already == 1:
+                    x = np.load(x,allow_pickle = True)
+                    label = np.load(label,allow_pickle = True)
+                    print(x.shape,label.shape)
+                else:
+                    ValueError('wrong definition of adapted_already')
 
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]

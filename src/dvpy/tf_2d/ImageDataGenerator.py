@@ -74,7 +74,6 @@ class ImageDataGenerator(object):
         slice_num = None,
         batch_size=None,
         patients_in_one_batch=None,
-        view = None,
         relabel_LVOT = None,
         shuffle=True,
         seed=None,
@@ -85,6 +84,7 @@ class ImageDataGenerator(object):
         output_channels=None,
         augment=False,
         normalize=False,
+        adapted_already=None,
     ):
         return dv.tf_2d.NumpyArrayIterator(
             X,
@@ -93,7 +93,6 @@ class ImageDataGenerator(object):
             slice_num = slice_num,
             batch_size=batch_size,
             patients_in_one_batch = patients_in_one_batch,
-            view = view,
             relabel_LVOT = relabel_LVOT,
             shuffle=shuffle,
             seed=seed,
@@ -104,6 +103,7 @@ class ImageDataGenerator(object):
             output_channels=output_channels,
             augment=augment,
             normalize=normalize,
+            adapted_already=adapted_already,
         )
 
     def predict_flow(
@@ -111,7 +111,6 @@ class ImageDataGenerator(object):
         X,
         y=None,
         batch_size=32,
-        view = None,
         relabel_LVOT = None,
         shuffle=True,
         seed=None,
@@ -128,7 +127,6 @@ class ImageDataGenerator(object):
             y,
             self,
             batch_size=batch_size,
-            view = view,
             relabel_LVOT = relabel_LVOT,
             shuffle=shuffle,
             seed=seed,
