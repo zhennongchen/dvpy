@@ -95,7 +95,6 @@ class NumpyArrayIterator(IteratorBase):
         volumes_already_load = []
         for i, j in enumerate(index_array):
             case = j[0]
-            assert case == index_array[0][0]
             if case in volumes_already_load:
                 continue
             else:
