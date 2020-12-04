@@ -115,7 +115,7 @@ class NumpyArrayIterator(IteratorBase):
                     x = np.load(x,allow_pickle = True)
                     label = np.load(label,allow_pickle = True)
                 else:
-                    ValueError('wrong definition of adapted_already')
+                    raise ValueError('wrong definition of adapted_already')
 
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
