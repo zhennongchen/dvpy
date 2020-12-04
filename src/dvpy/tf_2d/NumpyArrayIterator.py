@@ -49,7 +49,6 @@ class NumpyArrayIterator(IteratorBase):
         self.slice_num = slice_num
         self.batch_size = batch_size
         self.patients_in_one_batch = patients_in_one_batch
-        self.view = view
         self.relabel_LVOT = relabel_LVOT
         self.input_adapter = input_adapter
         self.output_adapter = output_adapter
