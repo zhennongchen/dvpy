@@ -64,6 +64,7 @@ class IteratorBase(object):
                     index_array = new_index_array
   
                 index_array = np.asarray(index_array)
+                print('index array is: ',index_array)
             
 
             total_slice = self.N * self.slice_num

@@ -91,7 +91,7 @@ class NumpyArrayIterator(IteratorBase):
         if self.shuffle == True:
             index_array = index_array.tolist()
             index_array.sort()
-        
+        print('index array in this batch is : ',index_array)
         volumes_already_load = []
         for i, j in enumerate(index_array):
             case = j[0]
