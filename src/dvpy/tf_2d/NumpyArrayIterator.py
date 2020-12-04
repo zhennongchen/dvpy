@@ -114,7 +114,6 @@ class NumpyArrayIterator(IteratorBase):
                 elif self.adapted_already == 1:
                     x = np.load(x,allow_pickle = True)
                     label = np.load(label,allow_pickle = True)
-                    print(x.shape,label.shape)
                 else:
                     ValueError('wrong definition of adapted_already')
 
