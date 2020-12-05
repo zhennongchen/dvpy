@@ -97,9 +97,7 @@ class NumpyArrayIterator(IteratorBase):
         for i, j in enumerate(index_array):
             print('i is: ',i)
             case = j[0]
-            if case in volumes_already_load:
-                continue
-            else:
+            if case not in volumes_already_load:
                 volumes_already_load.append(case)
                 # load volume + seg:
                 x = self.X[case]
