@@ -93,6 +93,7 @@ class NumpyArrayIterator(IteratorBase):
             index_array.sort()
       
         volumes_already_load = []
+        print('index_array here:', index_array)
         for i, j in enumerate(index_array):
             case = j[0]
             if case in volumes_already_load:
