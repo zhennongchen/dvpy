@@ -101,7 +101,9 @@ class NumpyArrayIterator(IteratorBase):
                 volumes_already_load.append(case)
                 # load volume + seg:
                 x = self.X[case]
+                print(x)
                 label = self.y[case]
+                print(label)
                 if self.adapted_already == 0:
                     if self.input_adapter is not None:
                         x = self.input_adapter(x)
@@ -114,11 +116,13 @@ class NumpyArrayIterator(IteratorBase):
                 elif self.adapted_already == 1:
                     x = np.load(x,allow_pickle = True)
                     label = np.load(label,allow_pickle = True)
+                    print(x.shape,label.shape)
                 else:
                     raise ValueError('wrong definition of adapted_already')
 
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
+            print(image.shape,seg.shape)
          
             # If *training*, we want to augment the data.
             # If *testing*, we do not.
