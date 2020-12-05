@@ -114,10 +114,10 @@ class NumpyArrayIterator(IteratorBase):
                 elif self.adapted_already == 1:
                     x = np.load(x,allow_pickle = True)
                     label = np.load(label,allow_pickle = True)
-                    print(x.shape,label.shape)
+                    
                 else:
                     raise ValueError('wrong definition of adapted_already')
-
+            print(j[1])
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
 
