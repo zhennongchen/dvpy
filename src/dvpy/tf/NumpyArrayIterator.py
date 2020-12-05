@@ -88,6 +88,7 @@ class NumpyArrayIterator(IteratorBase):
 
             # Retrieve the path to the input image...
             x = self.X[j]
+            print('input image is : ',x)
             # ...and convert the path to a raw (unnormalized) image.
             if self.input_adapter is not None:
                 x = self.input_adapter(x)
