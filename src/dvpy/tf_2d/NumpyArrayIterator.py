@@ -93,9 +93,7 @@ class NumpyArrayIterator(IteratorBase):
             index_array.sort()
       
         volumes_already_load = []
-        print('index_array here:', index_array)
         for i, j in enumerate(index_array):
-            print('i is: ',i)
             case = j[0]
             if case not in volumes_already_load:
                 volumes_already_load.append(case)
@@ -117,7 +115,7 @@ class NumpyArrayIterator(IteratorBase):
                     
                 else:
                     raise ValueError('wrong definition of adapted_already')
-            print(j[1])
+           
             image = x[:,:,j[1],:]   # !!!!
             seg = label[:,:,j[1],:]
 
