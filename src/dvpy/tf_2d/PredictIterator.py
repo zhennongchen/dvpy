@@ -51,7 +51,7 @@ class PredictIterator(IteratorBase):
         self.augment = augment
         self.normalize = normalize
         self.adapted_already = adapted_already
-        super(NumpyArrayIterator, self).__init__(X.shape[0], slice_num, batch_size, patients_in_one_batch, shuffle, seed)
+        super(PredictIterator, self).__init__(X.shape[0], slice_num, batch_size, patients_in_one_batch, shuffle, seed)
 
     def next(self):
         # for python 2.x.
