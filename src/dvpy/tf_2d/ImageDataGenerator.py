@@ -110,7 +110,9 @@ class ImageDataGenerator(object):
         self,
         X,
         y=None,
-        batch_size=32,
+        slice_num = None,
+        batch_size=None,
+        patients_in_one_batch=None,
         relabel_LVOT = None,
         shuffle=True,
         seed=None,
@@ -121,12 +123,15 @@ class ImageDataGenerator(object):
         output_channels=None,
         augment=False,
         normalize=False,
+        adapted_already=None,
     ):
         return dv.tf_2d.PredictIterator(
             X,
             y,
             self,
+            slice_num = slice_num,
             batch_size=batch_size,
+            patients_in_one_batch = patients_in_one_batch,
             relabel_LVOT = relabel_LVOT,
             shuffle=shuffle,
             seed=seed,
@@ -137,6 +142,7 @@ class ImageDataGenerator(object):
             output_channels=output_channels,
             augment=augment,
             normalize=normalize,
+            adapted_already=adapted_already,
         )
 
     def random_transform(self, x, y):

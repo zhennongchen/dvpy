@@ -16,10 +16,11 @@ class PredictIterator(IteratorBase):
         X,
         y,
         image_data_generator,
-        batch_size=32,
-        view = None,
+        slice_num = None,
+        batch_size = None,
+        patients_in_one_batch = None,
         relabel_LVOT = None,
-        shuffle=False,
+        shuffle=None,
         seed=None,
         input_adapter=None,
         output_adapter=None,
@@ -28,23 +29,19 @@ class PredictIterator(IteratorBase):
         output_channels=None,
         augment=False,
         normalize=False,
+        adapted_already = None,
     ):
 
         if K.image_dim_ordering() != "tf":
             raise Exception("Only tensorflow backend is supported.")
 
-        # if len(X) != len(y):
-
-        #     raise Exception(
-        #         "X (images tensor) and y (labels) "
-        #         "should have the same length. "
-        #         "Found: X.shape = %s, y.shape = %s"
-        #         % (np.asarray(X).shape, np.asarray(y).shape)
-        #     )
+   
         self.X = X
         self.y = y
         self.image_data_generator = image_data_generator
-        self.view = view
+        self.slice_num = slice_num
+        self.batch_size = batch_size
+        self.patients_in_one_batch = patients_in_one_batch
         self.relabel_LVOT = relabel_LVOT
         self.input_adapter = input_adapter
         self.output_adapter = output_adapter
@@ -53,7 +50,8 @@ class PredictIterator(IteratorBase):
         self.output_channels = output_channels
         self.augment = augment
         self.normalize = normalize
-        super(PredictIterator, self).__init__(X.shape[0], batch_size, shuffle, seed)
+        self.adapted_already = adapted_already
+        super(NumpyArrayIterator, self).__init__(X.shape[0], slice_num, batch_size, patients_in_one_batch, shuffle, seed)
 
     def next(self):
         # for python 2.x.
@@ -77,34 +75,37 @@ class PredictIterator(IteratorBase):
         batch_y1= np.zeros(
             tuple([current_batch_size]) + self.shape + tuple([self.output_channels])
         )
-        batch_y2=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y3=np.zeros(tuple([current_batch_size])+(3,))
-        batch_y4=np.zeros(tuple([current_batch_size])+(3,))
-     
+    
 
-        ##
-        ## Deal with Actual Data
-        ##
-
-        # index_array is a randomly shuffled list of cases for this batch
+    # load slice
+        if self.shuffle == True:
+            index_array = index_array.tolist()
+            index_array.sort()
+      
+        volumes_already_load = []
         for i, j in enumerate(index_array):
-
-            # Retrieve the path to the input image...
-            x = self.X[j]
-            # ...and convert the path to a raw (unnormalized) image.
-            if self.input_adapter is not None:
-                x = self.input_adapter(x)
-
-            # Normalize the *individual* images to zero mean and unit std
-            if self.normalize:
-                batch_x[i] = dv.normalize_image(x)
-            else:
-                batch_x[i] = x
-
-            #batch_y1[i] = label
-            #batch_y2[i] = t_c_n
-            #batch_y3[i] = x_n
-            #batch_y4[i] = y_n
+            case = j[0] #######
+            if case not in volumes_already_load:
+                volumes_already_load.append(case)
+                # load volume + seg:
+                x = self.X[case]
+                
+                if self.adapted_already == 0:
+                    if self.input_adapter is not None:
+                        x = self.input_adapter(x)
+                        adapt_size = x.shape
+                    if self.normalize == 1:
+                        x = dv.normalize_image(x)
+                elif self.adapted_already == 1:
+                    x = np.load(x,allow_pickle = True)
+                   
+                    
+                else:
+                    raise ValueError('wrong definition of adapted_already')
+           
+            image = x[:,:,j[1],:]   # !!!!
+            batch_x[i] = image
+            
             
         ##
         ## Return
@@ -119,9 +120,10 @@ class PredictIterator(IteratorBase):
         outputs = {
             name: layer
             for name, layer in zip(
-                self.image_data_generator.output_layer_names, [batch_y1,batch_y2,batch_y3,batch_y4]
+                self.image_data_generator.output_layer_names, [batch_y1]
             )
         }
         
 
         return (inputs, outputs)
+        
